@@ -1,0 +1,761 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>960 Gold Jewellery</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #fffdf8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ═════════════════════════════════════════════════════
+           CREATIVE NAVBAR WITH USER DROPDOWN
+           ═════════════════════════════════════════════════════ */
+
+        .navbar {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9F0 100%) !important;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+            border-bottom: 3px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+            overflow: visible;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            animation: navbar-shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes navbar-shimmer {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        /* Brand Logo */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: #d4af37 !important;
+            margin-right: 30px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.08);
+        }
+
+        .navbar-brand-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            animation: logo-shine 3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar-brand-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine-rotate 2s infinite;
+        }
+
+        @keyframes shine-rotate {
+            0% { transform: translate(-100%, -100%) rotate(0deg); }
+            100% { transform: translate(100%, 100%) rotate(45deg); }
+        }
+
+        @keyframes logo-shine {
+            0%, 100% { box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5); }
+        }
+
+        .navbar-brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            line-height: 1;
+        }
+
+        .navbar-brand-text .main {
+            font-size: 18px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand-text .sub {
+            font-size: 11px;
+            color: #c59a4a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation Links */
+        .navbar-nav {
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: #866543 !important;
+            font-weight: 600;
+            padding: 10px 16px !important;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            transition: left 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(212, 175, 55, 0.05);
+            z-index: -1;
+            transition: left 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #d4af37 !important;
+            transform: translateY(-3px);
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover::after {
+            left: 0;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            background: white;
+            border: 1.5px solid #f2e6c7;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 12px 0;
+            animation: dropdown-appear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes dropdown-appear {
+            from {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown-item {
+            color: #866543;
+            padding: 14px 24px;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.08), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
+            color: #d4af37;
+            border-left-color: #d4af37;
+            padding-left: 28px;
+            transform: translateX(4px);
+        }
+
+        .dropdown-item i {
+            font-size: 14px;
+            color: #d4af37;
+            min-width: 20px;
+        }
+
+        /* ═════════════════════════════════════════════════════
+           WATCHLIST ICON WITH BADGE
+           ═════════════════════════════════════════════════════ */
+
+        .watchlist-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .watchlist-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #d4af37;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.7rem;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            animation: badgePulse 0.3s ease;
+        }
+
+        @keyframes badgePulse {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .nav-link:hover .watchlist-badge {
+            background: #c59a4a;
+        }
+
+        /* ═════════════════════════════════════════════════════
+           USER DROPDOWN MENU
+           ═════════════════════════════════════════════════════ */
+
+        .user-dropdown {
+            position: relative;
+            margin-left: auto;
+        }
+
+        .user-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            color: #866543;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-dropdown-toggle:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            color: #d4af37;
+            transform: scale(1.05);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown-toggle:hover .user-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1.5px solid #f2e6c7;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 12px 0;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-top: 8px;
+            z-index: 1001;
+        }
+
+        .user-dropdown:hover .user-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .user-dropdown-item {
+            color: #866543;
+            padding: 14px 24px;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .user-dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.08), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .user-dropdown-item:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
+            color: #d4af37;
+            border-left-color: #d4af37;
+            padding-left: 28px;
+            transform: translateX(4px);
+        }
+
+        .user-dropdown-item i {
+            font-size: 14px;
+            color: #d4af37;
+            min-width: 20px;
+        }
+
+        /* Divider */
+        .dropdown-divider-custom {
+            height: 1px;
+            background: #f2e6c7;
+            margin: 8px 0;
+        }
+
+        /* Hamburger Menu */
+        .navbar-toggler {
+            border: none;
+            padding: 8px 12px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-width='2' d='M7 7l16 16M23 7L7 23'/%3e%3c/svg%3e");
+        }
+
+        /* Footer */
+        footer {
+            background: #FFF0DB;
+            padding: 40px 0;
+            margin-top: 70px;
+            border-top: 2px solid #d4af37;
+        }
+
+        footer a {
+            color: #8a6f4d;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar-brand {
+                margin-right: 20px;
+            }
+
+            .nav-link {
+                padding: 10px 14px !important;
+                font-size: 15px;
+            }
+
+            .navbar-brand-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .navbar-brand-text .main {
+                font-size: 15px;
+            }
+
+            .navbar-brand-text .sub {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 8px 0;
+            }
+
+            .navbar-brand-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .nav-link {
+                padding: 10px 12px !important;
+                font-size: 14px;
+            }
+
+            .navbar-nav {
+                gap: 5px;
+            }
+
+            .user-dropdown-toggle {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+
+            .user-dropdown-menu {
+                min-width: 180px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 6px 0;
+            }
+
+            .navbar-brand-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .nav-link {
+                padding: 8px 10px !important;
+                font-size: 13px;
+            }
+
+            .navbar-brand-text .main {
+                font-size: 13px;
+            }
+
+            .user-dropdown-toggle {
+                font-size: 12px;
+                gap: 6px;
+                padding: 6px 8px;
+            }
+
+            .user-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ========================= NAVBAR ========================= -->
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container-fluid px-3 px-lg-4">
+        <!-- Brand Logo -->
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <div class="navbar-brand-icon">💎</div>
+            <div class="navbar-brand-text">
+                <span class="main">960 Gold</span>
+                <span class="sub">Jewellery</span>
+            </div>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+
+                <!-- Category Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ring"></i> Categories
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for cat in categories %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'productfilter1' cat.id %}">
+                                <i class="fas fa-gem"></i>
+                                {{ cat.categoryname }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <a class="dropdown-item" href="#" style="color: #999;">No categories available</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'productall' %}">
+                        <i class="fas fa-gem"></i> Products
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">
+                        <i class="fas fa-info-circle"></i> About Us
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'feedback' %}">
+                        <i class="fas fa-star"></i> Feedback
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                </li>
+
+                <!-- WATCHLIST ICON (SHOWS ON ALL PAGES FOR LOGGED-IN USERS) -->
+                {% if request.session.email %}
+                <li class="nav-item">
+                    <a class="nav-link watchlist-link" href="{% url 'watchlist' %}" title="My Watchlist">
+                        <i class="fas fa-heart"></i> Watchlist
+                        {% if watchlist_count > 0 %}
+                        <span class="watchlist-badge">{{ watchlist_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% endif %}
+
+                <!-- USER DROPDOWN MENU -->
+                {% if request.session.email %}
+                <li class="nav-item user-dropdown">
+                    <button class="user-dropdown-toggle">
+                        <div class="user-avatar">
+                            {{ request.user.username|first|upper }}
+                        </div>
+                        <span class="d-none d-lg-inline">{{ request.user.username|truncatechars:12 }}</span>
+                        <i class="fas fa-chevron-down" style="font-size: 11px;"></i>
+                    </button>
+
+                    <!-- User Dropdown Menu -->
+                    <div class="user-dropdown-menu">
+                        <a href="{% url 'profile' %}" class="user-dropdown-item">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="{% url 'cart' %}" class="user-dropdown-item">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                        </a>
+                        <a href="{% url 'myorder' %}" class="user-dropdown-item">
+                            <i class="fas fa-shopping-bag"></i> My Orders
+                        </a>
+                        <a href="{% url 'change' %}" class="user-dropdown-item">
+                            <i class="fas fa-key"></i> Change Password
+                        </a>
+                        <div class="dropdown-divider-custom"></div>
+                        <a href="{% url 'logout1' %}" class="user-dropdown-item" style="color: #e74c3c; border-left-color: #e74c3c;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </li>
+
+                {% else %}
+                <!-- LOGIN BUTTON -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login1' %}">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ========================= PAGE CONTENT ========================= -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- ========================= FOOTER ========================= -->
+<footer>
+    <div class="container text-center">
+        <h3 class="fw-bold" style="color:#C19A6B; letter-spacing:2px; margin-bottom: 15px;">💎 960 Gold Jewellery</h3>
+        <p style="color:#8a6f4d;">Premium handcrafted jewellery made with elegance and love.</p>
+
+        <hr style="width:60%; margin:auto; border-color:#d5b48c;">
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: center;" class="mt-3">
+            <a href="{% url 'index' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                🏠 Home
+            </a>
+
+            <!-- CATEGORIES DROPDOWN -->
+            <div class="dropdown" style="position: relative; display: inline-block;">
+                <button class="btn btn-sm" type="button"
+                    style="background: none; border: none; color: #8a6f4d; font-size: 16px; cursor: pointer; transition: 0.3s;"
+                    id="footerCategoriesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    📂 Categories ▼
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="footerCategoriesDropdown" style="min-width: 200px;">
+                    {% for cat in categories %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'productfilter1' cat.id %}"
+                            style="padding: 10px 15px; color: #333; text-decoration: none; transition: 0.3s;">
+                            <i class="fas fa-gem" style="color: #d4af37;"></i>
+                            {{ cat.categoryname }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li>
+                        <a class="dropdown-item" href="#" style="padding: 10px 15px; color: #999;">
+                            No categories available
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <a href="{% url 'productall' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                💍 All Jewellery
+            </a>
+
+            <a href="{% url 'contact' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                💌 Contact
+            </a>
+        </div>
+
+        <p class="mt-3" style="color:#A18463; font-size:0.9rem;">
+            © 2025 960 Gold Jewellery · All Rights Reserved ✨
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

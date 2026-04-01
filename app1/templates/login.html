@@ -1,0 +1,217 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #FFF7D1, #E5E4E2); /* Light gold → silver */
+        font-family: 'Poppins', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        color: #444;
+    }
+
+    main { flex: 1; }
+
+    /* ===== CARD ===== */
+    .auth-container {
+        max-width: 520px;
+        margin: 90px auto;
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        border: 1px solid #E6E6E6;
+        overflow: hidden;
+    }
+
+    /* ===== TABS ===== */
+    .auth-tabs {
+        display: flex;
+        background: linear-gradient(to right, #E5E4E2, #F5F5F5); /* Pure silver */
+    }
+    .auth-tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        font-weight: bold;
+        font-size: 18px;
+        color: #777;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .auth-tab.active {
+        background: linear-gradient(135deg, #FFD700, #FFF3A0); /* Gold tab */
+        color: #725000;
+        border-bottom: 3px solid #FFD700;
+        box-shadow: inset 0 0 10px rgba(255,215,0,0.4);
+    }
+
+    /* ===== FORMS ===== */
+    .auth-form {
+        padding: 35px;
+        display: none;
+    }
+    .auth-form.active {
+        display: block;
+    }
+
+    /* ===== INPUTS ===== */
+    .input-field {
+        margin-bottom: 20px;
+    }
+    .input-field label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+        color: #444;
+    }
+    .input-field input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #C9C9C9;
+        border-radius: 12px;
+        font-size: 15px;
+        background: #FAFAFA;
+        color: #444;
+        transition: 0.3s;
+    }
+    .input-field input:focus {
+        border-color: #FFD700;
+        box-shadow: 0 0 8px rgba(255,215,0,0.5);
+        outline: none;
+    }
+
+    /* ===== GOLD BUTTON ===== */
+    .btn-auth {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: bold;
+        color: #725000;
+        background: linear-gradient(135deg, #FFD700, #FFE55C);
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+    }
+    .btn-auth:hover {
+        background: linear-gradient(135deg, #FFE55C, #FFF1A8);
+        transform: scale(1.02);
+    }
+
+    /* ===== SILVER OUTLINE BUTTON ===== */
+    .btn-admin {
+        margin-top: 15px;
+        background: white !important;
+        color: #757575 !important;
+        border: 2px solid #C0C0C0 !important;
+        box-shadow: none !important;
+    }
+    .btn-admin:hover {
+        background: #F2F2F2 !important;
+        color: black !important;
+    }
+
+    /* ===== LINKS ===== */
+    .extra-links {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .extra-links a {
+        color: #C9A100; /* Soft gold */
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .extra-links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="auth-container">
+    <!-- Tabs -->
+    <div class="auth-tabs">
+        <div class="auth-tab active" onclick="showForm('login')">Login</div>
+        <div class="auth-tab" onclick="showForm('register')">Register</div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="auth-form active" id="login-form">
+        <form method="POST" action="{% url 'login1' %}">
+            {% csrf_token %}
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-auth">Login Now</button>
+        </form>
+        <br>
+        <p>
+    <a href="{% url 'admin_login' %}" class="btn-auth btn-admin">
+        Login as Admin
+    </a>
+</p>
+
+    </div>
+    <br>
+    <br><br>
+
+
+    <!-- Register Form -->
+    <div class="auth-form" id="register-form">
+        <form method="POST" action="{% url 'register1' %}">
+            {% csrf_token %}
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-field">
+                <label>Phone</label>
+                <input type="number" name="phone" placeholder="Enter your phone" required>
+            </div>
+            <div class="input-field">
+                <label>Address</label>
+                <input type="text" name="address" placeholder="Enter your address" required>
+            </div>
+            <div class="input-field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Create a password" required>
+            </div>
+            <button type="submit" class="btn-auth">Register Now</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function showForm(type) {
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const tabs = document.querySelectorAll('.auth-tab');
+
+    if (type === 'login') {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+    } else {
+        registerForm.classList.add('active');
+        loginForm.classList.remove('active');
+        tabs[1].classList.add('active');
+        tabs[0].classList.remove('active');
+    }
+}
+</script>
+
+{% if message %}
+<script>alert("{{message}}")</script>
+{% endif %}
+{% endblock %}

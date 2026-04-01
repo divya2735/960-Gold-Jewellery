@@ -1,0 +1,496 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>960 Gold Jewellery | Admin Dashboard</title>
+  <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+<style>
+
+/* ============================
+   960 Gold Jewellery – LUXURY THEME
+============================ */
+
+/* Sidebar – Luxury Gold */
+.sidebar {
+    background-color: #d4af37 !important; /* Luxury gold */
+    color: #fff !important;
+}
+
+.sidebar a {
+    color: #fff !important;
+    font-weight: 500;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: rgba(255,255,255,0.25) !important;
+    border-radius: 6px;
+}
+
+/* Logo Title */
+.logo-title {
+    color: white !important;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+/* Main Area – Pale White-Gold */
+.main-wrapper {
+    background-color: #f9f4e8 !important; /* Pale white-gold */
+    min-height: 100vh;
+}
+
+/* Circle Avatars */
+.circle-avatar {
+    background-color: #f2e6c7;
+    color: #6d4e00;
+    border: 2px solid #d4af37;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Navbar */
+.main-nav--bg {
+    background: #fff !important;
+    border-bottom: 2px solid #f2e6c7;
+}
+
+/* Search Box */
+.search-wrapper input {
+    border: 1.5px solid #e0d7c6;
+    border-radius: 8px;
+    background: #fffdf8;
+}
+
+/* Stat Cards – clean white + soft gold border */
+.stat-cards-item {
+    background: #ffffff !important;
+    border: 1px solid #f2e6c7;
+    border-radius: 16px;
+    padding: 18px;
+    transition: 0.3s;
+}
+.stat-cards-item:hover {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+}
+
+/* Icons inside cards */
+.stat-cards-icon {
+    background: #f9f4e8 !important;
+    color: #b38a22 !important;
+    border: 1px solid #e8dcb9;
+}
+
+/* White block (charts background) */
+.white-block {
+    background: white !important;
+    border-radius: 16px;
+    border: 1px solid #f2e6c7;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+/* Titles */
+.main-title, h3 {
+    color: #7a5a12 !important;
+}
+
+/* Footer */
+.footer {
+    background: #fff;
+    border-top: 1px solid #f2e6c7;
+}
+.footer-start p a {
+    color: #d4af37;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   CUSTOM SCROLLBAR STYLING
+═════════════════════════════════════════════════════════════ */
+
+.messages-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 10px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+    background: #b38a22;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layer"></div>
+<a class="skip-link sr-only" href="#skip-target">Skip to content</a>
+
+<div class="page-flex">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-start">
+      <div class="sidebar-head">
+        <a href="{% url 'index' %}" class="logo-wrapper">
+          <div class="logo-text">
+            <span class="logo-title">960 Gold Jewellery</span>
+            <span class="logo-subtitle">Admin</span>
+          </div>
+        </a>
+
+        <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+          <span class="icon menu-toggle"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-body">
+        <ul class="sidebar-body-menu">
+          <li><a class="active" href="{% url 'admin_dashboard' %}"><span class="icon home"></span>Dashboard</a></li>
+          <li><a href="{% url 'product_list' %}"><span class="icon document"></span>Products</a></li>
+          <li><a href="{% url 'category_list' %}"><span class="icon document"></span>Categories</a></li>
+          <li><a href="{% url 'order_list' %}"><span class="icon document"></span>Orders</a></li>
+          <li><a href="{% url 'product_report' %}"><span class="icon document"></span>Product Report</a></li>
+          <li><a href="{% url 'user_list' %}"><span class="icon user-3"></span>Users</a></li>
+         </ul>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <a class="sidebar-user">
+        <span class="sidebar-user-img">
+          <div class="circle-avatar">A</div>
+        </span>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user__title">{{ request.user.username }}</span>
+          <span class="sidebar-user__subtitle">Administrator</span>
+        </div>
+      </a>
+    </div>
+  </aside>
+
+
+
+  <!-- Main Content -->
+  <div class="main-wrapper">
+    <nav class="main-nav--bg">
+      <div class="container main-nav">
+        <div class="main-nav-start">
+          <div class="search-wrapper">
+            <form method="get" action="{% url 'admin_dashboard' %}">
+              <i data-feather="search"></i>
+              <input type="text" name="q" placeholder="Search products, categories..." value="{{ query }}">
+            </form>
+          </div>
+        </div>
+
+        <div class="main-nav-end">
+          <div class="nav-user-wrapper">
+            <button class="nav-user-btn dropdown-btn" type="button">
+              <span class="nav-user-img">
+                <div class="circle-avatar">P</div>
+              </span>
+            </button>
+            <ul class="users-item-dropdown nav-user-dropdown dropdown">
+              <li><a href="{% url 'admin_profile' %}"><i data-feather="user"></i>Profile</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+
+
+
+    <main class="main users chart-page" id="skip-target">
+      <div class="container">
+
+        <h2 class="main-title">Dashboard</h2>
+
+        <!-- Stats Cards -->
+        <div class="row stat-cards">
+
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon"><i data-feather="shopping-cart"></i></div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ products.count }}</p>
+                <p class="stat-cards-info__title">Total Products</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon"><i data-feather="grid"></i></div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ categories.count }}</p>
+                <p class="stat-cards-info__title">Categories</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon"><i data-feather="users"></i></div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ user_count }}</p>
+                <p class="stat-cards-info__title">Users</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon"><i data-feather="package"></i></div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ orders.count }}</p>
+                <p class="stat-cards-info__title">Total Orders</p>
+              </div>
+            </article>
+          </div>
+
+        </div>
+
+
+
+        <!-- Charts Section -->
+        <article class="white-block">
+          <div class="row align-items-center">
+
+            <div class="col-md-8">
+              <div class="top-cat-title">
+                <h3>Category Distribution</h3>
+                <p>{{ categories.count }} Categories</p>
+              </div>
+              <canvas id="categoryChart"></canvas>
+            </div>
+
+            <div class="col-md-4">
+              <div class="top-cat-title text-center">
+                <h3>Users</h3>
+                <p>Total {{ user_count }} Users</p>
+              </div>
+              <canvas id="userChart"></canvas>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- ═════════════════════════════════════════════════════════════
+             CONTACT US & FEEDBACK MESSAGES SECTION
+        ═════════════════════════════════════════════════════════════ -->
+
+        <div class="row">
+
+          <!-- CONTACT US MESSAGES -->
+          <div class="col-lg-6">
+            <article class="white-block">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.3rem;">📧 Contact Us Messages</h3>
+                <span style="background: #ffc107; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                  {{ contacts.count }}
+                </span>
+              </div>
+
+              {% if contacts %}
+                <div class="messages-container" style="max-height: 450px; overflow-y: auto; padding-right: 10px;">
+                  {% for contact in contacts|slice:":10" %}
+                    <div style="
+                      background: #f9f4e8;
+                      border: 1px solid #f2e6c7;
+                      border-left: 4px solid #ffc107;
+                      border-radius: 8px;
+                      padding: 15px;
+                      margin-bottom: 12px;
+                      transition: all 0.3s ease;
+                    "
+                    onmouseover="this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.15)'; this.style.transform='translateY(-2px)';"
+                    onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                      <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                          <p style="font-weight: 600; color: #6d4e00; margin-bottom: 3px; font-size: 1.05rem;">
+                            {{ contact.name }}
+                          </p>
+                          <p style="font-size: 0.9rem; color: #8a6f4d; margin-bottom: 8px;">
+                            {{ contact.email }}
+                          </p>
+                        </div>
+                        <span style="background: #fff3cd; color: #856404; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; margin-left: 10px;">
+                          📧 New
+                        </span>
+                      </div>
+                      <p style="font-size: 0.9rem; color: #555; margin: 8px 0; line-height: 1.5;">
+                        <strong>📱 Phone:</strong> {{ contact.phone }}<br>
+                        <strong>💬 Message:</strong> {{ contact.message|truncatewords:20 }}
+                      </p>
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <a href="/admin/app1/contactus/" style="
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background: #fff3cd;
+                  color: #856404;
+                  border: 1px solid #ffc107;
+                  border-radius: 6px;
+                  text-decoration: none;
+                  font-weight: 600;
+                  font-size: 0.9rem;
+                  margin-top: 15px;
+                  transition: all 0.3s ease;
+                "
+                onmouseover="this.style.background='#ffc107'; this.style.color='white';"
+                onmouseout="this.style.background='#fff3cd'; this.style.color='#856404';">
+                  👉 View All Messages →
+                </a>
+              {% else %}
+                <div style="text-align: center; color: #8a6f4d; padding: 30px 20px; font-style: italic;">
+                  ✓ No contact messages yet
+                </div>
+              {% endif %}
+            </article>
+          </div>
+
+          <!-- FEEDBACK MESSAGES -->
+          <div class="col-lg-6">
+            <article class="white-block">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.3rem;">⭐ Feedback Messages</h3>
+                <span style="background: #17a2b8; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                  {{ feedbacks.count }}
+                </span>
+              </div>
+
+              {% if feedbacks %}
+                <div class="messages-container" style="max-height: 450px; overflow-y: auto; padding-right: 10px;">
+                  {% for feedback in feedbacks|slice:":10" %}
+                    <div style="
+                      background: #f9f4e8;
+                      border: 1px solid #f2e6c7;
+                      border-left: 4px solid #17a2b8;
+                      border-radius: 8px;
+                      padding: 15px;
+                      margin-bottom: 12px;
+                      transition: all 0.3s ease;
+                    "
+                    onmouseover="this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.15)'; this.style.transform='translateY(-2px)';"
+                    onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                      <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                          <p style="font-weight: 600; color: #6d4e00; margin-bottom: 3px; font-size: 1.05rem;">
+                            {{ feedback.name }}
+                          </p>
+                          <p style="font-size: 0.9rem; color: #8a6f4d; margin-bottom: 8px;">
+                            {{ feedback.email }}
+                          </p>
+                        </div>
+                        <span style="background: #d1ecf1; color: #0c5460; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; margin-left: 10px;">
+                          ⭐ New
+                        </span>
+                      </div>
+                      <p style="font-size: 0.9rem; color: #555; margin: 8px 0; line-height: 1.5;">
+                        <strong>📱 Phone:</strong> {{ feedback.phone }}<br>
+                        <strong>💬 Feedback:</strong> {{ feedback.feedback|truncatewords:20 }}
+                      </p>
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <a href="/admin/app1/feedback/" style="
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background: #d1ecf1;
+                  color: #0c5460;
+                  border: 1px solid #17a2b8;
+                  border-radius: 6px;
+                  text-decoration: none;
+                  font-weight: 600;
+                  font-size: 0.9rem;
+                  margin-top: 15px;
+                  transition: all 0.3s ease;
+                "
+                onmouseover="this.style.background='#17a2b8'; this.style.color='white';"
+                onmouseout="this.style.background='#d1ecf1'; this.style.color='#0c5460';">
+                  👉 View All Feedback →
+                </a>
+              {% else %}
+                <div style="text-align: center; color: #8a6f4d; padding: 30px 20px; font-style: italic;">
+                  ✓ No feedback messages yet
+                </div>
+              {% endif %}
+            </article>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+
+
+    <footer class="footer">
+      <div class="container footer--flex">
+        <div class="footer-start">
+          <p>2025 © 960 Gold Jewellery Admin - <a href="/">960goldjewellery.com</a></p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* CATEGORY BAR CHART */
+new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ category_labels|safe }},
+        datasets: [{
+            label: 'Products per Category',
+            data: {{ category_counts|safe }},
+            backgroundColor: ['#d4af37','#e6c98b','#f2e6c7'],
+        }]
+    },
+    options: { responsive: true }
+});
+
+/* USER PIE CHART */
+new Chart(document.getElementById('userChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ user_labels|safe }},
+        datasets: [{
+            data: {{ user_counts|safe }},
+            backgroundColor: ['#d4af37','#e6c98b','#f2e6c7','#f9f4e8'],
+        }]
+    },
+    options: { responsive: true }
+});
+</script>
+
+</body>
+</html>

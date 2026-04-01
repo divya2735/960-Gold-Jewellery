@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+  <style>
+    body {
+      background: #ffe5e5;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #b71c1c;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form p {
+      margin-bottom: 15px; /* space between fields */
+    }
+    form input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+    }
+    .btn-save {
+      background: #b71c1c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background: #ccc;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-save">Save Changes</button>
+      <a href="{% url 'admin_profile' %}" class="btn-cancel">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Razorpay Payment</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const options = {
+        key: "{{ razorpay_merchant_key }}",
+        amount: "{{ razorpay_amount }}",
+        currency: "{{ currency }}",
+        name: "E-commerce App",
+        description: "Order Payment",
+        order_id: "{{ razorpay_order_id }}",
+        prefill: {
+            name: "{{ prefill_name }}",
+            email: "{{ prefill_email }}",
+            contact: "{{ prefill_contact }}"
+        },
+        theme: { color: "#d4af37" },
+       handler: function(response){
+    fetch("{{ callback_url }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "success") {
+            Swal.fire({icon: 'success', title: 'Payment Successful'})
+            .then(()=> window.location.href = "{% url 'orderSuccessView' %}");
+        } else {
+            Swal.fire({icon: 'error', title: 'Payment Failed', text: data.message});
+        }
+    });
+},
+modal: {
+    ondismiss: function(){
+        Swal.fire({icon: 'info', title: 'Payment Cancelled', text: 'You cancelled the payment.'});
+    }
+}
+
+
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function(response){
+        Swal.fire({icon: 'error', title: 'Payment Failed', text: response.error.description});
+    });
+
+    rzp1.open();
+});
+</script>
+
+</body>
+</html>

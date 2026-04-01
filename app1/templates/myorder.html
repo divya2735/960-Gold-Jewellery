@@ -1,0 +1,144 @@
+{% extends 'common.html' %}
+{% block content %}
+
+<style>
+  body {
+    background: #f8f8f8;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h2 {
+    color: #d4af37;
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(212,175,55,0.4);
+    margin-bottom: 25px;
+  }
+
+  /* TABLE STYLING */
+  .orders-table {
+    background: linear-gradient(135deg, #ffffff, #f3f3f3);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  }
+
+  table {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  thead {
+    background: #d4af37 !important;
+    color: #000 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  tbody tr {
+    background: #ffffff;
+    transition: 0.3s;
+  }
+
+  tbody tr:hover {
+    background: #fff8dc;
+    transform: scale(1.01);
+  }
+
+  td, th {
+    vertical-align: middle !important;
+  }
+
+  /* GOLD BUTTON */
+  .btn-gold {
+    background: #d4af37;
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(212,175,55,0.4);
+  }
+
+  .btn-gold:hover {
+    background: #b89430;
+    color: #000;
+  }
+
+  .no-orders {
+    padding: 20px;
+    background: #fff4d3;
+    border-left: 6px solid #d4af37;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #6a5300;
+    box-shadow: 0 0 10px rgba(212,175,55,0.3);
+  }
+
+</style>
+
+<div class="container py-4">
+
+  <h2 class="text-center">My Orders</h2>
+
+  <p class="text-center"><b>User:</b> {{ a }}</p>
+
+  {% if orders %}
+  <div class="orders-table mt-4">
+
+    <div class="table-responsive">
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>View</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><b>#{{ order.id }}</b></td>
+            <td>{{ order.orderDate|date:"M d, Y • H:i" }}</td>
+            <td>₹ {{ order.orderAmount }}</td>
+            <td>{{ order.paymentMethod }}</td>
+
+            <td>
+              {% if order.status == "Delivered" %}
+                <span style="color: green; font-weight: 600;">Delivered</span>
+              {% elif order.status == "Pending" %}
+                <span style="color: orange; font-weight: 600;">Pending</span>
+              {% else %}
+                <span style="color: red; font-weight: 600;">{{ order.status }}</span>
+              {% endif %}
+            </td>
+
+            <td>
+              <a href="{% url 'order_detail' order.id %}" class="btn-gold btn-sm">
+                View Details
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+  {% else %}
+  <div class="no-orders mt-4 text-center">
+    No orders found.
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>960 Gold Jewellery | Product Report</title>
+
+  <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+<style>
+
+/* ----------------------------------
+   SAME SIDEBAR AS PRODUCTS PAGE
+---------------------------------- */
+.sidebar {
+    background-color: #d4af37 !important;
+    color: #fff !important;
+}
+.sidebar a {
+    color: #fff !important;
+    font-weight: 500;
+}
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: rgba(255,255,255,0.25) !important;
+    border-radius: 6px;
+}
+.logo-title {
+    color: white !important;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ----------------------------------
+   MAIN WRAPPER – SAME PADDING/SIZE
+---------------------------------- */
+.main-wrapper {
+    background-color: #f9f4e8 !important;
+    min-height: 100vh;
+    padding: 35px;
+}
+
+.page-flex {
+    display: flex;
+}
+
+/* Title */
+.main-title {
+    color: #7a5a12;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+/* Table */
+.posts-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #f2e6c7;
+}
+.posts-table th {
+    background: #fff8e6;
+    padding: 14px;
+    color: #7a5a12;
+    border-bottom: 1px solid #e6d9b5;
+}
+.posts-table td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    color: #4a4234;
+}
+
+/* Row Hover */
+.posts-table tr:hover {
+    background-color: #fff9ec;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page-flex">
+
+  <!-- SIDEBAR (IDENTICAL TO PRODUCT PAGE) -->
+  <aside class="sidebar">
+      <div class="sidebar-start">
+        <div class="sidebar-head">
+          <a href="{% url 'index' %}" class="logo-wrapper">
+            <div class="logo-text">
+              <span class="logo-title">960 Gold Jewellery</span>
+              <span class="logo-subtitle">Admin</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="sidebar-body">
+          <ul class="sidebar-body-menu">
+            <li><a href="{% url 'admin_dashboard' %}"><span class="icon home"></span>Dashboard</a></li>
+            <li><a href="{% url 'product_list' %}"><span class="icon document"></span>Products</a></li>
+            <li><a href="{% url 'category_list' %}"><span class="icon document"></span>Categories</a></li>
+            <li><a href="{% url 'order_list' %}"><span class="icon document"></span>Orders</a></li>
+            <li><a class="active" href="{% url 'product_report' %}"><span class="icon document"></span>Product Report</a></li>
+            <li><a href="{% url 'user_list' %}"><span class="icon user-3"></span>Users</a></li>
+          </ul>
+        </div>
+      </div>
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrapper">
+
+      <h2 class="main-title">Product Sales Report</h2>
+
+      <div class="users-table table-wrapper">
+        <table class="posts-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Total Orders</th>
+              <th>Total Quantity</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in report %}
+            <tr>
+              <td>{{ item.product_name }}</td>
+              <td>{{ item.total_orders }}</td>
+              <td>{{ item.total_quantity }}</td>
+              <td>₹{{ item.total_revenue }}</td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="4" style="text-align:center; padding:20px;">No sales data available</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+  </div>
+</div>
+
+</body>
+</html>

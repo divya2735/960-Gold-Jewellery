@@ -1,0 +1,23 @@
+{% block content %}
+<div class="container mt-4">
+  <h2>Categories</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Category Name</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+      <tr>
+        <td>{{ category.id }}</td>
+        <td>{{ category.categoryname }}</td>
+        <td><img src="{{ category.img.url }}" width="50"></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

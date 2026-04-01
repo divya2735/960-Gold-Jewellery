@@ -1,0 +1,434 @@
+{% extends 'common.html' %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+  .watchlist-container {
+    padding: 40px 0;
+    min-height: 600px;
+  }
+
+  .watchlist-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 3px solid #d4af37;
+    padding-bottom: 20px;
+  }
+
+  .watchlist-header h1 {
+    color: #866543;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+
+  .watchlist-header p {
+    color: #8a6f4d;
+    font-size: 1.1rem;
+  }
+
+  .empty-watchlist {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .empty-watchlist i {
+    font-size: 80px;
+    color: #d4af37;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  .empty-watchlist h3 {
+    color: #866543;
+    margin-bottom: 10px;
+  }
+
+  .empty-watchlist p {
+    color: #8a6f4d;
+    margin-bottom: 30px;
+  }
+
+  .watchlist-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    border: 1px solid #f0f0f0;
+  }
+
+  .watchlist-item:hover {
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.15);
+    transform: translateY(-3px);
+  }
+
+  .watchlist-item-content {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .watchlist-item-image {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+    background: #f9f4e8;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .watchlist-item-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .watchlist-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .watchlist-item-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #866543;
+    margin-bottom: 8px;
+  }
+
+  .watchlist-item-category {
+    color: #8a6f4d;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .watchlist-item-description {
+    color: #8a6f4d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .watchlist-item-added {
+    color: #d4af37;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .watchlist-item-price {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .watchlist-item-price .current {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #d90429;
+  }
+
+  .watchlist-item-price .original {
+    text-decoration: line-through;
+    color: #8a6f4d;
+    font-size: 0.95rem;
+  }
+
+  .watchlist-item-price .discount-badge {
+    background: #d90429;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .watchlist-item-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-add-cart {
+    background: linear-gradient(90deg, #D4AF37, #C0C0C0, #E5C07B);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .btn-add-cart:hover {
+    background: linear-gradient(90deg, #C0C0C0, #D4AF37, #C0C0C0);
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(192, 192, 192, 0.45);
+    color: #000;
+  }
+
+  .btn-remove {
+    background: #f0f0f0;
+    border: 2px solid #d90429;
+    color: #d90429;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .btn-remove:hover {
+    background: #d90429;
+    color: white;
+    transform: scale(1.04);
+  }
+
+  .btn-view {
+    background: linear-gradient(90deg, #000000, #434343);
+    color: #f1f1f1;
+    border: 2px solid #C0C0C0;
+    padding: 10px 18px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .btn-view:hover {
+    background: linear-gradient(90deg, #434343, #000000);
+    color: #D4AF37;
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  .continue-shopping {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .continue-shopping a {
+    background: linear-gradient(90deg, #D4AF37, #C0C0C0, #E5C07B);
+    color: #000;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+  }
+
+  .continue-shopping a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+  }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #d4af37;
+    color: #000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .watchlist-item-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .watchlist-item-image {
+      width: 100%;
+      height: 200px;
+    }
+
+    .watchlist-item-actions {
+      justify-content: center;
+    }
+
+    .btn-add-cart, .btn-remove, .btn-view {
+      min-width: 100%;
+      flex: 1;
+    }
+  }
+</style>
+
+<div class="container watchlist-container">
+  <!-- Header -->
+  <div class="watchlist-header">
+    <h1>💗 My Watchlist</h1>
+    <p>
+      {% if watchlist_count > 0 %}
+        You have <strong>{{ watchlist_count }}</strong> item{{ watchlist_count|pluralize }} in your watchlist
+      {% else %}
+        Your watchlist is empty
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- Empty State -->
+  {% if watchlist_count == 0 %}
+    <div class="empty-watchlist">
+      <i class="fas fa-heart-broken"></i>
+      <h3>No Items in Watchlist</h3>
+      <p>You haven't added any items to your watchlist yet.</p>
+      <a href="{% url 'productall' %}" class="btn btn-lg" style="background: linear-gradient(90deg, #D4AF37, #C0C0C0); color: #000; font-weight: 600; border-radius: 50px; padding: 12px 30px;">
+        <i class="fas fa-shopping-bag"></i> Start Shopping
+      </a>
+    </div>
+  {% else %}
+    <!-- Watchlist Items -->
+    {% for item in watchlist_items %}
+      <div class="watchlist-item">
+        <div class="watchlist-item-content">
+          <!-- Product Image -->
+          <div class="watchlist-item-image">
+            <img src="{{ item.product.img.url }}" alt="{{ item.product.name }}">
+          </div>
+
+          <!-- Product Details -->
+          <div class="watchlist-item-details">
+            <div>
+              <h3 class="watchlist-item-title">{{ item.product.name }}</h3>
+              <p class="watchlist-item-category">
+                <strong>Category:</strong> {{ item.product.category.categoryname }}
+                {% if item.product.brand %}
+                  | <strong>Brand:</strong> {{ item.product.brand }}
+                {% endif %}
+              </p>
+              <p class="watchlist-item-description">{{ item.product.description|truncatewords:20 }}</p>
+              <p class="watchlist-item-added">
+                <i class="fas fa-clock"></i> Added on: {{ item.added_at|date:"d M Y, H:i" }}
+              </p>
+            </div>
+
+            <!-- Price -->
+            <div class="watchlist-item-price">
+              <span class="current">₹{{ item.discounted_price }}</span>
+              {% if item.product.discount %}
+                <span class="original">₹{{ item.product.price }}</span>
+                <span class="discount-badge">
+                  -{{ item.product.discount|default:0 }}% OFF
+                </span>
+              {% endif %}
+            </div>
+
+            <!-- Actions -->
+            <div class="watchlist-item-actions">
+              <button class="btn btn-add-cart add-to-cart-watchlist" data-product-id="{{ item.product.id }}">
+                <i class="fas fa-shopping-bag"></i> Add to Cart
+              </button>
+              <a href="{% url 'productget1' item.product.id %}" class="btn btn-view">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <button class="btn btn-remove remove-from-watchlist" data-product-id="{{ item.product.id }}">
+                <i class="fas fa-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Continue Shopping -->
+    <div class="continue-shopping">
+      <a href="{% url 'productall' %}">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+$(document).ready(function() {
+  // Add to cart from watchlist
+  $(".add-to-cart-watchlist").click(function() {
+    let productId = $(this).data("product-id");
+    let btn = $(this);
+
+    $.post("{% url 'add_to_cart_ajax' %}", {
+      'product_id': productId,
+      'quantity': 1,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data) {
+      if (data.status == "success" || data.status == "added") {
+        btn.text("✓ Added to Cart").addClass("btn-success").prop("disabled", true);
+        showNotification("✓ Added to Cart", "#d4af37");
+        setTimeout(function() {
+          btn.text("Add to Cart").removeClass("btn-success").prop("disabled", false);
+        }, 2000);
+      } else if (data.status == "login_required") {
+        window.location.href = "{% url 'login1' %}";
+      }
+    });
+  });
+
+  // Remove from watchlist
+  $(".remove-from-watchlist").click(function() {
+    let productId = $(this).data("product-id");
+    let btn = $(this);
+    let item = btn.closest(".watchlist-item");
+
+    if (confirm("Remove this item from watchlist?")) {
+      $.post("{% url 'remove_from_watchlist_ajax' %}", {
+        'product_id': productId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      }, function(data) {
+        if (data.status == "removed") {
+          item.fadeOut(300, function() {
+            $(this).remove();
+            showNotification("✓ Removed from Watchlist", "#d4af37");
+            setTimeout(function(){
+              location.reload();
+            }, 1000);
+          });
+        } else if (data.status == "login_required") {
+          window.location.href = "{% url 'login1' %}";
+        }
+      });
+    }
+  });
+
+  function showNotification(message, color) {
+    let toast = $(`<div class="toast-notification">${message}</div>`);
+    $("body").append(toast);
+    setTimeout(function(){
+      toast.fadeOut(300, function(){
+        $(this).remove();
+      });
+    }, 2000);
+  }
+});
+</script>
+
+{% endblock %}

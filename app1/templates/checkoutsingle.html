@@ -1,0 +1,329 @@
+{% extends 'common.html' %}
+{% block content %}
+<style>
+  body { background: #f8f8f8; font-family: 'Poppins', sans-serif; }
+
+  /* GOLD HEADING */
+  h2 {
+      color: #d4af37;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px rgba(212,175,55,0.4);
+  }
+
+  /* MAIN GRID */
+  .checkout-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      margin: 40px auto;
+      max-width: 1100px;
+  }
+
+  /* BOXES — SILVER METAL */
+  .checkout-section, .summary-section {
+      background: linear-gradient(135deg, #ffffff, #f1f1f1);
+      border-radius: 12px;
+      padding: 25px;
+      border: 1px solid #c8c8c8;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  }
+
+  /* SUMMARY BORDER — GOLD */
+  .summary-section {
+      border: 2px solid #d4af37;
+      box-shadow: 0 0 15px rgba(212,175,55,0.25);
+  }
+
+  /* GOLD BUTTON */
+  .btn-proceed {
+      background: #d4af37;
+      border: none;
+      color: #000;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 10px 20px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(212,175,55,0.4);
+  }
+  .btn-proceed:hover {
+      background: #b89430;
+  }
+
+  /* ADDRESS BOX – SILVER OUTLINE */
+  .address-box {
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fafafa;
+  }
+
+  textarea.form-control, select.form-select { width: 100%; }
+  .address-display { white-space: pre-line; margin-top: 5px; }
+
+  /* COUPON CARD — GOLD LEFT BAR */
+  .coupon-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #e3e3e3;
+      border-left: 6px solid #d4af37;
+      background: #fff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  .coupon-card:hover {
+      background: #fff8e1;
+      transform: translateY(-2px);
+  }
+
+  /* FLAT BADGE — GOLD */
+  .flat-badge {
+      background: #d4af37;
+      color: #000;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-right: 8px;
+      font-weight: 600;
+  }
+
+  /* APPLY/REMOVE BUTTONS — GOLD */
+  .apply-btn, .remove-btn {
+      background: #d4af37;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(212,175,55,0.4);
+  }
+  .apply-btn:hover, .remove-btn:hover {
+      background: #b89430;
+  }
+
+  @media (max-width: 768px) {
+      .checkout-container { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="container mt-4">
+  <h2 class="text-center mb-5">Checkout</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="final_total" id="final_total" value="{{ total }}">
+    <input type="hidden" name="saved_address_id" id="saved_address_id">
+    <input type="hidden" name="productid" value="{{ product.id }}">
+    <input type="hidden" name="quantity" value="{{ quantity }}">
+    <input type="hidden" name="selected_size" value="{{ selected_size }}">
+    <input type="hidden" name="coupon_code" id="coupon_code_hidden">
+
+    <div class="checkout-container">
+
+      <!-- LEFT -->
+      <div class="checkout-section">
+        <h4>Select Address</h4>
+
+        {% for addr in addresses %}
+        <div class="address-box">
+          <input type="radio" name="address_option" id="addr{{ addr.id }}" value="saved" data-id="{{ addr.id }}" {% if forloop.first %}checked{% endif %}>
+          <label for="addr{{ addr.id }}"><b>{{ addr.label }}:</b></label>
+          <p class="address-display">
+            Street: {{ addr.street }}
+            City: {{ addr.city }}
+            State: {{ addr.state }}
+            Country: {{ addr.country }}
+            Pincode: {{ addr.pincode }}
+          </p>
+        </div>
+        {% empty %}
+        <p>No saved addresses yet.</p>
+        {% endfor %}
+
+        <!-- Add New Address -->
+        <div class="address-box">
+          <input type="radio" name="address_option" id="new_address" value="alternate">
+          <label for="new_address"><b>Add New Address</b></label>
+
+          <div id="new_address_fields" style="display:none; margin-top:10px;">
+            <input type="text" name="street" class="form-control" placeholder="Street">
+<input type="text" name="city" class="form-control" placeholder="City">
+<input type="text" name="state" class="form-control" placeholder="State">
+<input type="text" name="country" class="form-control" placeholder="Country">
+<input type="text" name="pincode" class="form-control" placeholder="Pincode">
+
+            <select name="new_label" id="new_label_field" class="form-select mt-2">
+              <option value="Home">Home</option>
+              <option value="Office">Office</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <hr>
+
+        <h4>Payment Method</h4>
+        <div class="form-check mt-2">
+          <input type="radio" name="payment_method" id="pay_cash" value="Cash" class="form-check-input" required>
+          <label for="pay_cash" class="form-check-label">Cash on Delivery</label>
+        </div>
+
+        <div class="form-check mt-2">
+          <input type="radio" name="payment_method" id="pay_online" value="Online" class="form-check-input" required>
+          <label for="pay_online" class="form-check-label">Online Payment</label>
+        </div>
+      </div>
+
+      <!-- RIGHT SUMMARY -->
+      <div class="summary-section">
+        <h4>Order Summary</h4>
+        <p>{{ product.name }} x {{ quantity }} (Size: {{ selected_size }})</p>
+
+        <p>Subtotal: ₹<span id="subtotal">{{ total }}</span></p>
+
+        <p id="discount_line" style="display:none;">
+            Discount: ₹<span id="discount_amount">0</span>
+        </p>
+
+        <h4>Total: ₹<span id="total_amount">{{ total }}</span></h4>
+        <hr>
+
+        <h4>Available Coupons</h4>
+        {% if coupons %}
+          {% for c in coupons %}
+          <div class="coupon-card" id="coupon-card-{{ c.code }}">
+            <div>
+              <span class="flat-badge">FLAT OFF</span>
+              <span>{{ c.code }} -
+                {% if c.discount_type == "percent" %}{{ c.discount_value }}% off
+                {% else %}₹{{ c.discount_value }} off
+                {% endif %}
+                {% if c.min_amount > 0 %}(Min ₹{{ c.min_amount }}){% endif %}
+              </span>
+            </div>
+            <button type="button" class="apply-btn" id="btn-{{ c.code }}" onclick="applyCoupon('{{ c.code }}')">
+              Apply
+            </button>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted mt-2">No active coupons</p>
+        {% endif %}
+
+        <small id="coupon_message" class="mt-2 d-block"></small>
+
+        <button type="submit" class="btn-proceed mt-3">Place Order</button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Show new address fields
+  document.querySelectorAll('input[name="address_option"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const showNew = document.getElementById('new_address').checked;
+      document.getElementById('new_address_fields').style.display = showNew ? 'block' : 'none';
+
+      if (radio.checked && radio.value === 'saved')
+        document.getElementById('saved_address_id').value = radio.getAttribute('data-id');
+    });
+  });
+
+  // Initialize hidden field on load if a saved address is checked
+  const checkedAddrSingle = document.querySelector('input[name="address_option"]:checked');
+  if (checkedAddrSingle && checkedAddrSingle.value === "saved") {
+      document.getElementById("saved_address_id").value = checkedAddrSingle.getAttribute('data-id');
+  }
+
+  // COD Confirmation Popup
+document.querySelector("form").addEventListener("submit", function(e) {
+  const cod = document.getElementById("pay_cash");
+
+  if (cod.checked) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Confirm Cash on Delivery?',
+      text: "Are you sure you want to place this order?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d4af37',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, Place Order'
+    }).then(result => {
+      if (result.isConfirmed) {
+        e.target.submit();
+      }
+    });
+  }
+});
+
+
+  /* Coupon Logic */
+  let appliedCoupon = null;
+
+  function applyCoupon(code) {
+    const amount = parseFloat(document.getElementById("total_amount").innerText);
+
+    fetch(`/apply-coupon/?code=${code}&amount=${amount}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) {
+
+          document.getElementById("discount_line").style.display = "block";
+          document.getElementById("discount_amount").innerText = data.discount;
+          document.getElementById("total_amount").innerText = data.new_total;
+          document.getElementById("final_total").value = data.new_total;
+          document.getElementById("coupon_code_hidden").value = code;
+
+          if (appliedCoupon && appliedCoupon !== code)
+              restoreApplyButton(appliedCoupon);
+
+          const btn = document.getElementById(`btn-${code}`);
+          btn.innerText = "Remove";
+          btn.classList.remove("apply-btn");
+          btn.classList.add("remove-btn");
+          btn.setAttribute("onclick", `removeCoupon('${code}')`);
+
+          appliedCoupon = code;
+        }
+        else alert(data.message);
+      });
+  }
+
+  function removeCoupon(code) {
+    const subtotal = parseFloat(document.getElementById("subtotal").innerText);
+
+    document.getElementById("discount_line").style.display = "none";
+    document.getElementById("discount_amount").innerText = "0";
+    document.getElementById("total_amount").innerText = subtotal;
+    document.getElementById("final_total").value = subtotal;
+    document.getElementById("coupon_code_hidden").value = "";
+
+    restoreApplyButton(code);
+    appliedCoupon = null;
+  }
+
+  function restoreApplyButton(code) {
+    const btn = document.getElementById(`btn-${code}`);
+    if (!btn) return;
+
+    btn.innerText = "Apply";
+    btn.classList.remove("remove-btn");
+    btn.classList.add("apply-btn");
+    btn.setAttribute("onclick", `applyCoupon('${code}')`);
+  }
+</script>
+
+{% endblock %}

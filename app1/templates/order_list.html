@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>960 Gold Jewellery | Orders</title>
+  <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+  <style>
+
+    /* -----------------------------
+       SIDEBAR – GOLD THEME
+    ----------------------------- */
+    .sidebar {
+      background-color: #d4af37 !important; /* Gold */
+      color: white !important;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 260px;
+      z-index: 10;
+    }
+
+    .sidebar a {
+      color: white !important;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: rgba(255,255,255,0.20) !important;
+      border-radius: 6px;
+    }
+
+    .logo-title {
+      color: #fff !important;
+    }
+
+    /* -----------------------------
+       MAIN WRAPPER – SAME SPACING
+    ----------------------------- */
+    .main-wrapper {
+      background-color: #f9f4e8 !important; /* Cream */
+      min-height: 100vh;
+      margin-left: 260px; /* SAME as your original */
+      padding: 20px;      /* SAME spacing */
+    }
+
+    .main-title {
+      margin: 0;
+      font-size: 22px;
+      color: #7a5a12;
+      font-weight: 700;
+    }
+
+    /* -----------------------------
+       TABLE STYLES – GOLD THEME
+    ----------------------------- */
+    .posts-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .posts-table th, .posts-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .posts-table th {
+      background: #fff4d4; /* Light gold header */
+      font-weight: bold;
+      color: #7a5a12;
+    }
+
+    .posts-table tr:hover {
+      background-color: #fff9e8;
+    }
+
+    img {
+      border-radius: 6px;
+    }
+
+    .action-btn {
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      background: #d4af37;
+      padding: 8px 15px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      opacity: .85;
+    }
+
+    input[type="date"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="page-flex">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-start">
+
+      <div class="sidebar-head">
+        <a href="{% url 'index' %}" class="logo-wrapper" title="960 Gold Jewellery">
+          <div class="logo-text">
+            <span class="logo-title">960 Gold Jewellery</span>
+            <span class="logo-subtitle">Admin</span>
+          </div>
+        </a>
+
+        <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+          <span class="sr-only">Toggle menu</span>
+          <span class="icon menu-toggle"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-body">
+        <ul class="sidebar-body-menu">
+          <li><a href="{% url 'admin_dashboard' %}"><span class="icon home"></span>Dashboard</a></li>
+          <li><a href="{% url 'product_list' %}"><span class="icon document"></span>Products</a></li>
+          <li><a href="{% url 'category_list' %}"><span class="icon document"></span>Categories</a></li>
+          <li><a class="active" href="{% url 'order_list' %}"><span class="icon document"></span>Orders</a></li>
+          <li><a href="{% url 'product_report' %}"><span class="icon document"></span>Product Report</a></li>
+          <li><a href="{% url 'user_list' %}"><span class="icon user-3"></span>Users</a></li>
+           </ul>
+      </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="#" class="sidebar-user">
+        <span class="sidebar-user-img"><div class="circle-avatar">A</div></span>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user__title">{{ request.user.username }}</span>
+          <span class="sidebar-user__subtitle">Administrator</span>
+        </div>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <h2 class="main-title">All Orders</h2>
+
+      <a href="{% url 'export_orders_csv' %}" class="action-btn">
+        Export Orders as CSV
+      </a>
+    </div>
+
+    <!-- Filter -->
+    <form method="get" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+      <label>From:</label>
+      <input type="date" name="start_date" value="{{ request.GET.start_date }}">
+
+      <label>To:</label>
+      <input type="date" name="end_date" value="{{ request.GET.end_date }}">
+
+      <button type="submit" class="action-btn" style="padding:6px 12px;">
+        Filter
+      </button>
+
+      {% if request.GET.start_date or request.GET.end_date %}
+      <a href="{% url 'order_list' %}" style="background:gray;color:white;padding:6px 12px;border-radius:6px;text-decoration:none;">
+        Reset
+      </a>
+      {% endif %}
+    </form>
+
+    <!-- Table -->
+    <div class="users-table table-wrapper">
+      <table class="posts-table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Contact</th>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Qty</th>
+            <th>Order Amount</th>
+            <th>Payment Method</th>
+            <th>Transaction ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Invoice</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.userId }}</td>
+            <td>{{ order.userName }}</td>
+            <td>{{ order.userContact }}</td>
+            <td>{{ order.productid.productname }}</td>
+            <td>{{ order.selected_size }}</td>
+            <td>{{ order.productqty }}</td>
+            <td>{{ order.orderAmount }}</td>
+            <td>{{ order.paymentMethod }}</td>
+            <td>{{ order.transactionId }}</td>
+            <td>{{ order.orderDate }}</td>
+
+            <td>
+              <form method="post" action="{% url 'update_order_status' order.id %}">
+                {% csrf_token %}
+                <select name="status" onchange="this.form.submit()">
+                  <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}
+                    {% if order.status != 'Pending' %}disabled{% endif %}>Pending</option>
+
+                  <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}
+                    {% if order.status != 'Pending' %}disabled{% endif %}>Shipped</option>
+
+                  <option value="Out for Delivery" {% if order.status == 'Out for Delivery' %}selected{% endif %}
+                    {% if order.status != 'Shipped' %}disabled{% endif %}>Out for Delivery</option>
+
+                  <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}
+                    {% if order.status != 'Out for Delivery' %}disabled{% endif %}>Delivered</option>
+
+                  <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}
+                    {% if order.status == 'Delivered' or order.status == 'Cancelled' %}disabled{% endif %}>Cancelled</option>
+                </select>
+              </form>
+            </td>
+
+            <td>
+              <a href="{% url 'download_invoice' order.id %}" class="action-btn" style="padding:6px 12px;">
+                Download
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="12" style="text-align:center;">No orders found</td></tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

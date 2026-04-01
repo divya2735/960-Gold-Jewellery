@@ -1,0 +1,379 @@
+{% extends 'common.html' %}
+{% block content %}
+<br>
+
+<style>
+    /* Gold Theme Buttons */
+    .btn-gold {
+        background: linear-gradient(45deg, #d4af37, #f7e98e);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        padding: 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .btn-gold:hover {
+        background: linear-gradient(45deg, #c29b2a, #f0d76a);
+        transform: scale(1.02);
+    }
+
+    /* Size Options */
+    .size-option {
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    .size-option.selected {
+        background: #d4af37 !important;
+        color: #fff !important;
+        border: 1px solid #d4af37 !important;
+    }
+
+    .size-option:disabled,
+    .size-option[data-stock="0"] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Watchlist Button */
+    .watchlist-btn-detail {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #d4af37;
+        background: white;
+        color: #d4af37;
+        cursor: pointer;
+        font-size: 20px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .watchlist-btn-detail:hover {
+        background: #d4af37;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .watchlist-btn-detail.in-watchlist {
+        background: #d4af37;
+        color: white;
+    }
+
+    .watchlist-btn-detail.in-watchlist:hover {
+        background: #c59a4a;
+        color: white;
+    }
+
+    .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #d4af37;
+        color: #000;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .section-title {
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 15px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .detail-value {
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .price-section {
+        margin: 20px 0;
+    }
+
+    .current-price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #d90429;
+    }
+
+    .original-price {
+        font-size: 1.1rem;
+        color: #999;
+        text-decoration: line-through;
+    }
+
+    .description-section {
+        margin: 20px 0;
+        line-height: 1.6;
+        color: #555;
+    }
+
+</style>
+
+<div class="col py-3">
+    <section style="background-color: #f8f9fa;">
+        <div class="container py-5">
+            <div class="row">
+
+                <!-- Left Image -->
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <div class="card shadow-sm" style="border:none;">
+                        <img src="{{ product.img.url }}" class="card-img-top"
+                             style="height: 420px; object-fit: contain; background:#fff; padding:10px; border-radius:10px;">
+                    </div>
+                </div>
+
+                <!-- Right Details -->
+                <div class="col-md-6">
+                    <div class="card-body">
+                        
+                        <!-- Title with Watchlist Button -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h2 class="section-title">{{ product.name }}</h2>
+                            </div>
+                            <!-- Watchlist Heart Button -->
+                            <button class="watchlist-btn-detail {% if is_in_watchlist %}in-watchlist{% endif %}" 
+                                    data-product-id="{{ product.id }}"
+                                    title="Add to Watchlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+
+                        <!-- Brand & Category -->
+                        <p class="detail-value">
+                            <span class="detail-label">Brand:</span> {{ product.brand|default:"N/A" }}
+                        </p>
+                        <p class="detail-value">
+                            <span class="detail-label">Category:</span> {{ product.category.categoryname }}
+                        </p>
+                        <p class="detail-value">
+                            <span class="detail-label">Available Stock:</span> {{ product.quantity }}
+                        </p>
+
+                        <!-- Price -->
+                        <div class="price-section">
+                            {% if product.discount %}
+                                <div class="current-price">₹ {{ product.discounted_price }}</div>
+                                <div class="original-price">₹ {{ product.price }}</div>
+                                <small style="color: #d90429; font-weight: 600;">
+                                    Save ₹{{ product.discount }} ({{ discount_percent }}% OFF)
+                                </small>
+                            {% else %}
+                                <div class="current-price">₹ {{ product.price }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="description-section">
+                            <p class="detail-label">Description:</p>
+                            <p>{{ product.description }}</p>
+                        </div>
+
+                        <!-- Sizes -->
+                        {% if product.size_stock %}
+                            <div class="mb-4">
+                                <p class="detail-label">Available Sizes:</p>
+                                <div style="margin-top: 10px;">
+                                    {% for size, stock in product.size_stock.items %}
+                                        <span class="size-option {% if stock == 0 %}disabled{% endif %}"
+                                              data-stock="{{ stock }}"
+                                              data-size="{{ size }}"
+                                              style="display:inline-block;
+                                                     background:#fff;
+                                                     border:1px solid #ccc;
+                                                     padding:8px 16px;
+                                                     margin:6px;
+                                                     border-radius:6px;
+                                                     cursor:pointer;
+                                                     font-weight:500;
+                                                     transition:all 0.2s;
+                                                     {% if stock == 0 %}opacity:0.5; cursor:not-allowed;{% endif %}">
+                                          {{ size }} {% if stock == 0 %}<span style="font-size:0.8rem;">(Out of Stock)</span>{% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Buy Now Form -->
+                        <form method="GET" action="{% url 'checkout_single' %}" id="buyForm" class="mt-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ product.id }}">
+                            <input type="hidden" name="selected_size" id="selectedSize">
+                            <input type="hidden" name="quantity" id="hiddenQty">
+
+                            <div class="form-group mb-3">
+                                <label class="detail-label"><strong>Quantity:</strong></label>
+                                <input class="form-control" type="number" id="qtyInput" min="1" max="{{ product.quantity }}" value="1" required 
+                                       style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                            </div>
+
+                            <div class="d-flex gap-2 w-100">
+                                <button type="submit" class="btn-gold flex-grow-1 btn-lg" id="buyButton">
+                                    ⚡ Buy Now
+                                </button>
+                                <button type="button" class="btn btn-outline-dark flex-grow-1 btn-lg" id="addToCartBtn" data-product-id="{{ product.id }}">
+                                    🛒 Add to Cart
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+// ============================================
+// SIZE SELECTION
+// ============================================
+
+const sizeOptions = document.querySelectorAll('.size-option');
+const selectedSizeInput = document.getElementById('selectedSize');
+const qtyInput = document.getElementById('qtyInput');
+const hiddenQty = document.getElementById('hiddenQty');
+const buyButton = document.getElementById('buyButton');
+
+// Default quantity
+hiddenQty.value = qtyInput.value;
+
+// Size selection
+sizeOptions.forEach(option => {
+    option.addEventListener('click', function () {
+        const stock = parseInt(this.dataset.stock);
+        if (stock === 0) return;
+
+        // Remove old selections
+        sizeOptions.forEach(o => o.classList.remove("selected"));
+
+        // Mark selected
+        this.classList.add("selected");
+        selectedSizeInput.value = this.dataset.size;
+
+        qtyInput.max = stock;
+        qtyInput.value = 1;
+        hiddenQty.value = 1;
+    });
+});
+
+// Sync quantity
+qtyInput.addEventListener("input", function () {
+    hiddenQty.value = qtyInput.value;
+});
+
+// ============================================
+// WATCHLIST FUNCTIONALITY
+// ============================================
+
+$(document).ready(function() {
+    $(".watchlist-btn-detail").click(function(e) {
+        e.preventDefault();
+        
+        let btn = $(this);
+        let productId = btn.data("product-id");
+        let isInWatchlist = btn.hasClass("in-watchlist");
+
+        if (isInWatchlist) {
+            // Remove from watchlist
+            $.post("{% url 'remove_from_watchlist_ajax' %}", {
+                'product_id': productId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            }, function(data) {
+                if (data.status == "removed") {
+                    btn.removeClass("in-watchlist");
+                    showNotification("✓ Removed from Watchlist");
+                }
+            });
+        } else {
+            // Add to watchlist
+            $.post("{% url 'add_to_watchlist_ajax' %}", {
+                'product_id': productId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            }, function(data) {
+                if (data.status == "added" || data.status == "already_added") {
+                    btn.addClass("in-watchlist");
+                    showNotification("✓ Added to Watchlist");
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // ADD TO CART FUNCTIONALITY
+    // ============================================
+
+    $("#addToCartBtn").click(function(e) {
+        e.preventDefault();
+        let btn = $(this);
+        let productId = btn.data("product-id");
+        let quantity = $("#qtyInput").val();
+
+
+        // Disable button to prevent double clicks
+        btn.prop("disabled", true).text('Adding...');
+
+        $.post("{% url 'add_to_cart_ajax' %}", {
+            'product_id': productId,
+            'quantity': quantity,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        }, function(data) {
+            if (data.status == "success") {
+                showNotification("🛒 Added to Cart successfully");
+                btn.html('🛒 Add to Cart');
+                btn.prop("disabled", false);
+            } else {
+                showNotification("❌ Error adding to cart");
+                btn.html('🛒 Add to Cart');
+                btn.prop("disabled", false);
+            }
+        }).fail(function() {
+            showNotification("❌ Error adding to cart");
+            btn.html('🛒 Add to Cart');
+            btn.prop("disabled", false);
+        });
+    });
+
+    function showNotification(message) {
+        let toast = $(`<div class="toast-notification">${message}</div>`);
+        $("body").append(toast);
+        setTimeout(function() {
+            toast.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 2000);
+    }
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,307 @@
+{% extends 'common.html' %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+  .product-card { transition: all 0.3s ease-in-out; }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
+  .product-card img { transition: transform 0.3s ease; }
+  .product-card:hover img { transform: scale(1.05); }
+  .btn-danger { background: linear-gradient(90deg, #ff4d4d, #d90429); border: none; font-weight: 500; }
+  .btn-danger:hover { background: linear-gradient(90deg, #d90429, #ff4d4d); }
+  .btn-outline-dark { border-width: 2px; }
+  .btn-outline-dark:hover { background: #000; color: #fff; }
+  .qty-control { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 5px; }
+  .qty-control input { width: 40px; text-align: center; }
+  .qty-control button { width: 30px; height: 30px; }
+
+  /* PREMIUM GOLD–SILVER ADD TO CART BUTTON */
+  .golden-silver-btn {
+    background: linear-gradient(90deg, #D4AF37, #C0C0C0, #E5C07B);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+  }
+
+  .golden-silver-btn:hover {
+    background: linear-gradient(90deg, #C0C0C0, #D4AF37, #C0C0C0);
+    transform: scale(1.06);
+    color: #000;
+    box-shadow: 0 6px 18px rgba(192, 192, 192, 0.45);
+  }
+
+  /* OPPOSITE THEME BUTTON – BLACK + SILVER ELEGANCE */
+  .view-details-btn {
+    background: linear-gradient(90deg, #000000, #434343);
+    color: #f1f1f1;
+    border: 2px solid #C0C0C0; /* silver border */
+    padding: 10px 18px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    border-radius: 50px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .view-details-btn:hover {
+    background: linear-gradient(90deg, #434343, #000000);
+    color: #D4AF37; /* light gold highlight */
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  /* HEART WATCHLIST BUTTON */
+  .watchlist-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #d4af37;
+    background: white;
+    color: #d4af37;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .watchlist-btn:hover {
+    background: #d4af37;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .watchlist-btn.in-watchlist {
+    background: #d4af37;
+    color: white;
+  }
+
+  .watchlist-btn.in-watchlist:hover {
+    background: #c59a4a;
+    color: white;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #d4af37;
+    color: #000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+</style>
+
+<div class="container py-4">
+  <!-- Product Display -->
+  <div class="row">
+    {% for i in data %}
+      <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden product-card">
+          <!-- Product Image with Watchlist Button -->
+          <div class="position-relative bg-white d-flex align-items-center justify-content-center" style="height:280px;">
+            <img src="{{ i.img.url }}" alt="{{ i.name }}" class="img-fluid p-3" style="max-height:100%; object-fit:contain;">
+            
+            <!-- Watchlist Heart Button (Top Right) -->
+            <button class="watchlist-btn position-absolute top-0 end-0 m-2 {% if i.id in watchlist_products %}in-watchlist{% endif %}" 
+                    data-product-id="{{ i.id }}"
+                    title="Add to Watchlist">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="card-body text-center">
+            <h5 class="card-title fw-bold">{{ i.name }}</h5>
+            <p class="text-muted small">{{ i.category }}</p>
+            <p class="text-muted small mb-2">{{ i.description|truncatewords:12 }}</p>
+            {% if i.discount %}
+              <p class="fw-bold text-danger fs-5 mb-1">₹ {{ i.discounted_price }}</p>
+              <p class="text-muted small mb-3" style="text-decoration: line-through; color:red;">₹ {{ i.price }}</p>
+            {% else %}
+              <p class="fw-bold text-danger fs-5 mb-3">₹ {{ i.price }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Card Footer - Actions -->
+          <div class="card-footer bg-white border-0 text-center">
+            <div class="action-buttons">
+              <a href="{% url 'productget1' i.id %}" class="btn view-details-btn flex-grow-1">
+                View Details
+              </a>
+            </div>
+
+            <!-- Add to Cart or Qty Control -->
+            <div style="margin-top: 10px;">
+              {% if i.id in cart_dict %}
+                <!-- Quantity Control (if already in cart) -->
+                {% with cart_item=cart_dict|stringformat:"s" %}
+                <div class="qty-control" data-product-id="{{ i.id }}" data-item-id="{{ cart_dict.i.id.item_id }}">
+                  <button class="qty-btn" data-action="decrease">-</button>
+                  <input type="text" class="qty-input" value="{{ cart_dict.i.id.quantity }}" readonly>
+                  <button class="qty-btn" data-action="increase">+</button>
+                </div>
+                {% endwith %}
+              {% else %}
+                <!-- Add to Cart Button -->
+                <button class="btn golden-silver-btn w-100 add-to-cart" data-product-id="{{ i.id }}">
+                  <i class="fas fa-shopping-bag"></i> Add to Cart
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+
+  // ============================================
+  // WATCHLIST FUNCTIONALITY
+  // ============================================
+
+  $(".watchlist-btn").click(function(e){
+    e.preventDefault();
+    
+    let btn = $(this);
+    let productId = btn.data("product-id");
+    let isInWatchlist = btn.hasClass("in-watchlist");
+
+
+    if (isInWatchlist) {
+      // Remove from watchlist
+      $.post("{% url 'remove_from_watchlist_ajax' %}", {
+        'product_id': productId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      }, function(data){
+        if(data.status == "removed"){
+          btn.removeClass("in-watchlist");
+          showNotification("✓ Removed from Watchlist", "#d4af37");
+          updateWatchlistCount(data.watchlist_count);
+        }
+      });
+    } else {
+      // Add to watchlist
+      $.post("{% url 'add_to_watchlist_ajax' %}", {
+        'product_id': productId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      }, function(data){
+        if(data.status == "added" || data.status == "already_added"){
+          btn.addClass("in-watchlist");
+          showNotification("✓ Added to Watchlist", "#d4af37");
+          updateWatchlistCount(data.watchlist_count);
+        }
+      });
+    }
+  });
+
+  // ============================================
+  // ADD TO CART FUNCTIONALITY
+  // ============================================
+
+  $(".add-to-cart").click(function(){
+    let productId = $(this).data("product-id");
+    let btn = $(this);
+    $.post("{% url 'add_to_cart_ajax' %}", {
+      'product_id': productId,
+      'quantity': 1,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data){
+      if(data.status == "success"){
+        // Replace button with qty control
+        btn.replaceWith(`<div class="qty-control" data-product-id="${productId}" data-item-id="${data.item_id}">
+          <button class="qty-btn" data-action="decrease">-</button>
+          <input type="text" class="qty-input" value="${data.quantity}" readonly>
+          <button class="qty-btn" data-action="increase">+</button>
+        </div>`);
+        showNotification("✓ Added to Cart", "#d4af37");
+      }
+    });
+  });
+
+  // ============================================
+  // QUANTITY CONTROL
+  // ============================================
+
+  $(document).on("click", ".qty-btn", function(){
+    let parent = $(this).closest(".qty-control");
+    let itemId = parent.data("item-id");
+    let input = parent.find(".qty-input");
+    let qty = parseInt(input.val());
+    let action = $(this).data("action");
+    if(action == "increase") qty += 1;
+    else qty -= 1;
+
+    $.post("{% url 'update_cart_ajax' %}", {
+      'item_id': itemId,
+      'quantity': qty,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data){
+      if(data.status == "updated"){
+        input.val(data.quantity);
+      } else if(data.status == "removed"){
+        parent.replaceWith(`<button class="btn golden-silver-btn w-100 add-to-cart" data-product-id="${data.item_id}">Add to Cart</button>`);
+      }
+    });
+  });
+
+  // ============================================
+  // HELPER FUNCTIONS
+  // ============================================
+
+  function showNotification(message, color) {
+    let toast = $(`<div class="toast-notification">${message}</div>`);
+    $("body").append(toast);
+    setTimeout(function(){
+      toast.fadeOut(300, function(){
+        $(this).remove();
+      });
+    }, 2000);
+  }
+
+  function updateWatchlistCount(count) {
+    // Update navbar watchlist count if navbar has it
+    $(".watchlist-count").text(count);
+  }
+
+});
+</script>
+{% endblock %}

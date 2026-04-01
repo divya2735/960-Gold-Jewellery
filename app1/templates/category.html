@@ -1,0 +1,361 @@
+{% extends 'common.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Title -->
+  <h2 class="mb-4 text-center" style="color: #d4af37; font-weight: bold; font-size: 2.5rem;">
+    💎 {{ category.categoryname }}
+  </h2>
+
+  <!-- Filter Section -->
+  <form method="get" class="mb-4 p-3 border rounded shadow-sm" style="background-color: #f9f4e8; border: 2px solid #d4af37; border-radius: 15px !important;">
+    <div class="row g-3 align-items-end">
+
+      <!-- Brand Filter -->
+      <div class="col-md-3">
+        <label class="form-label" style="color: #333; font-weight: 600; margin-bottom: 8px;">Brand</label>
+        <select name="brand" class="form-select" style="border: 2px solid #d4af37; border-radius: 8px;">
+          <option value="">All Brands</option>
+          {% for b in brands %}
+            <option value="{{ b }}" {% if request.GET.brand == b %}selected{% endif %}>{{ b }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Color Filter -->
+      <div class="col-md-3">
+        <label class="form-label" style="color: #333; font-weight: 600; margin-bottom: 8px;">Color</label>
+        <select name="color" class="form-select" style="border: 2px solid #d4af37; border-radius: 8px;">
+          <option value="">All Colors</option>
+          {% for c in colors %}
+            <option value="{{ c }}" {% if request.GET.color == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Min Price -->
+      <div class="col-md-2">
+        <label class="form-label" style="color: #333; font-weight: 600; margin-bottom: 8px;">Min Price (₹)</label>
+        <input type="number" name="min_price" placeholder="0" value="{{ request.GET.min_price }}" class="form-control" style="border: 2px solid #d4af37; border-radius: 8px;">
+      </div>
+
+      <!-- Max Price -->
+      <div class="col-md-2">
+        <label class="form-label" style="color: #333; font-weight: 600; margin-bottom: 8px;">Max Price (₹)</label>
+        <input type="number" name="max_price" placeholder="999999" value="{{ request.GET.max_price }}" class="form-control" style="border: 2px solid #d4af37; border-radius: 8px;">
+      </div>
+
+      <!-- Filter Button -->
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-gold-filter w-100">
+          🔍 Filter
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Products Grid -->
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden product-card">
+        <!-- Product Image with Watchlist Button -->
+        <div class="position-relative bg-white d-flex align-items-center justify-content-center" style="height:280px; overflow: hidden;">
+          <img src="{{ product.img.url }}" alt="{{ product.name }}" class="img-fluid p-3 product-img" style="max-height:100%; object-fit:contain; transition: transform 0.3s ease;">
+          
+          <!-- Watchlist Heart Button (Top Right) -->
+          <button class="watchlist-btn position-absolute top-0 end-0 m-2 {% if product.id in watchlist_products %}in-watchlist{% endif %}" 
+                  data-product-id="{{ product.id }}"
+                  title="Add to Watchlist">
+            <i class="fas fa-heart"></i>
+          </button>
+          
+          <!-- Hover Badge -->
+          <div class="product-badge">
+            ✨ Premium
+          </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="card-body text-center" style="padding: 15px;">
+          <h5 class="card-title fw-bold" style="color: #333; font-size: 1.1rem; margin-bottom: 8px;">{{ product.name }}</h5>
+          <p class="text-muted small mb-2">{{ product.description|truncatewords:10 }}</p>
+          
+          <div style="margin: 12px 0;">
+            <p class="fw-bold text-danger fs-5 mb-0">
+              ₹ {{ product.price }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="card-footer bg-white border-0 px-3 pb-3">
+          <div class="action-buttons mb-2">
+            <a href="{% url 'productget1' product.id %}" class="btn view-details-btn">
+              View Details
+            </a>
+          </div>
+          
+          <!-- Add to Cart or Qty Control -->
+          <div class="cart-action-container" data-product-id="{{ product.id }}">
+            {% if product.id in cart_dict %}
+              {% with cart_item=cart_dict|get_item:product.id %}
+              <div class="qty-control" data-product-id="{{ product.id }}" data-item-id="{{ cart_item.id }}">
+                <button class="qty-btn" data-action="decrease">-</button>
+                <input type="text" class="qty-input" value="{{ cart_item.quantity }}" readonly>
+                <button class="qty-btn" data-action="increase">+</button>
+              </div>
+              {% endwith %}
+            {% else %}
+              <button class="btn golden-silver-btn w-100 add-to-cart" data-product-id="{{ product.id }}">
+                <i class="fas fa-shopping-bag"></i> Add to Cart
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% empty %}
+    <!-- No Products Message -->
+    <div class="col-12">
+      <div class="text-center py-5" style="background-color: #f9f4e8; border-radius: 15px; border: 2px dashed #d4af37;">
+        <h4 style="color: #d4af37; margin-bottom: 10px;">💎 No products found</h4>
+        <p style="color: #666; margin-bottom: 15px;">Try adjusting your filters or browse all products.</p>
+        <a href="{% url 'productall' %}" class="btn btn-gold-filter" style="width: auto; padding: 10px 30px;">
+          Browse All Products
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Styles -->
+<style>
+  .product-card { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); background: #fff; }
+  .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2) !important; }
+  .product-card:hover .product-img { transform: scale(1.08); }
+
+  .product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(90deg, #d4af37, #f7e98e);
+    color: #000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .product-card:hover .product-badge { opacity: 1; }
+
+  /* Buttons */
+  .btn-gold-filter {
+    background: linear-gradient(90deg, #d4af37, #f7e98e);
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s;
+  }
+  .btn-gold-filter:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); color: #000; }
+
+  .golden-silver-btn {
+    background: linear-gradient(90deg, #D4AF37, #C0C0C0, #E5C07B);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+  }
+  .golden-silver-btn:hover { background: linear-gradient(90deg, #C0C0C0, #D4AF37, #C0C0C0); transform: scale(1.05); }
+
+  .view-details-btn {
+    background: linear-gradient(90deg, #000000, #434343);
+    color: #f1f1f1;
+    border: 2px solid #C0C0C0;
+    padding: 10px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  .view-details-btn:hover { color: #D4AF37; transform: scale(1.05); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+  /* Watchlist Button */
+  .watchlist-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid #d4af37;
+    background: rgba(255,255,255,0.9);
+    color: #d4af37;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+  .watchlist-btn:hover { transform: scale(1.1); background: #d4af37; color: white; }
+  .watchlist-btn.in-watchlist { background: #d4af37; color: white; }
+
+  /* Qty Control */
+  .qty-control { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f8f9fa; border-radius: 50px; padding: 5px; border: 1px solid #ddd; }
+  .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: none; background: #fff; color: #d4af37; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  .qty-input { width: 40px; text-align: center; border: none; background: transparent; font-weight: bold; }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #d4af37;
+    color: #000;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+  }
+  @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+
+  // ============================================
+  // WATCHLIST FUNCTIONALITY
+  // ============================================
+  $(".watchlist-btn").click(function(e){
+    e.preventDefault();
+    let btn = $(this);
+    let productId = btn.data("product-id");
+    let isInWatchlist = btn.hasClass("in-watchlist");
+
+    // Check if user is logged in
+    let email = "{{ request.session.email|default:'' }}";
+    if (!email) {
+      window.location.href = "{% url 'login1' %}";
+      return;
+    }
+
+    if (isInWatchlist) {
+      $.post("{% url 'remove_from_watchlist_ajax' %}", {
+        'product_id': productId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      }, function(data){
+        if(data.status == "removed"){
+          btn.removeClass("in-watchlist");
+          showNotification("✓ Removed from Watchlist");
+          updateWatchlistCount(data.watchlist_count);
+        }
+      });
+    } else {
+      $.post("{% url 'add_to_watchlist_ajax' %}", {
+        'product_id': productId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      }, function(data){
+        if(data.status == "added" || data.status == "already_added"){
+          btn.addClass("in-watchlist");
+          showNotification("♥ Added to Watchlist");
+          updateWatchlistCount(data.watchlist_count);
+        }
+      });
+    }
+  });
+
+  // ============================================
+  // ADD TO CART FUNCTIONALITY
+  // ============================================
+  $(document).on("click", ".add-to-cart", function(){
+    let productId = $(this).data("product-id");
+    let btn = $(this);
+    let container = btn.closest(".cart-action-container");
+
+    $.post("{% url 'add_to_cart_ajax' %}", {
+      'product_id': productId,
+      'quantity': 1,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data){
+      if(data.status == "success"){
+        container.html(`<div class="qty-control" data-product-id="${productId}" data-item-id="${data.item_id}">
+          <button class="qty-btn" data-action="decrease">-</button>
+          <input type="text" class="qty-input" value="${data.quantity}" readonly>
+          <button class="qty-btn" data-action="increase">+</button>
+        </div>`);
+        showNotification("✓ Added to Cart");
+      } else if(data.status == "login_required" || data.status == "error"){
+        window.location.href = "{% url 'login1' %}";
+      }
+    });
+  });
+
+  // ============================================
+  // QUANTITY CONTROL
+  // ============================================
+  $(document).on("click", ".qty-btn", function(){
+    let parent = $(this).closest(".qty-control");
+    let itemId = parent.data("item-id");
+    let productId = parent.data("product-id");
+    let input = parent.find(".qty-input");
+    let qty = parseInt(input.val());
+    let action = $(this).data("action");
+    
+    if(action == "increase") qty += 1;
+    else qty -= 1;
+
+    $.post("{% url 'update_cart_ajax' %}", {
+      'item_id': itemId,
+      'quantity': qty,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data){
+      if(data.status == "updated"){
+        input.val(data.quantity);
+      } else if(data.status == "removed"){
+        parent.closest(".cart-action-container").html(`
+          <button class="btn golden-silver-btn w-100 add-to-cart" data-product-id="${productId}">
+            <i class="fas fa-shopping-bag"></i> Add to Cart
+          </button>
+        `);
+      }
+    });
+  });
+
+  // ============================================
+  // HELPERS
+  // ============================================
+  function showNotification(message) {
+    let toast = $(`<div class="toast-notification">${message}</div>`);
+    $("body").append(toast);
+    setTimeout(() => {
+      toast.fadeOut(400, function(){ $(this).remove(); });
+    }, 2500);
+  }
+
+  function updateWatchlistCount(count) {
+    if($(".watchlist-badge").length) {
+      $(".watchlist-badge").text(count).hide().fadeIn();
+    } else if(count > 0) {
+      // If badge doesn't exist but count > 0, could reload navbar or handle it
+      $(".watchlist-link").append(`<span class="watchlist-badge">${count}</span>`);
+    }
+  }
+
+});
+</script>
+
+{% endblock %}

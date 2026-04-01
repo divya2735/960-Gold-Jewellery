@@ -1,0 +1,152 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+/* ===== Contact Form Styling (Gold–Silver Luxury Theme) ===== */
+.contact-container {
+    max-width: 750px;
+    margin: 90px auto;
+    padding: 45px;
+    background: linear-gradient(135deg, #ffffff, #f7f7f7);
+    border: 2px solid #d4af37; /* gold border */
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+.contact-container:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 45px rgba(0,0,0,0.25);
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.contact-header h2 {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #d4af37, #c0c0c0);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.contact-header p {
+    font-size: 16px;
+    color: #555;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+}
+
+.form-grid {
+    display: grid;
+    gap: 22px;
+}
+
+.input-field label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #d4af37;
+    margin-bottom: 6px;
+    display: block;
+    letter-spacing: 0.5px;
+}
+
+.input-field input,
+.input-field textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.8px solid #c0c0c0;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    background: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+.input-field input:focus,
+.input-field textarea:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212,175,55,0.4);
+}
+
+textarea {
+    resize: none;
+    min-height: 120px;
+}
+
+/* Gold button */
+.btn-contact {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #d4af37, #b8952e);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(212,175,55,0.35);
+}
+.btn-contact:hover {
+    background: linear-gradient(135deg, #b8952e, #8c6f23);
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(212,175,55,0.55);
+}
+</style>
+
+<div class="contact-container">
+    <div class="contact-header">
+        <h2>Contact Us</h2>
+        <p>We’d love to hear from you! Share your message below.</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            {% if a %}
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" name="name" value="{{data.name}}" readonly>
+            </div>
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" value="{{data.email}}" readonly>
+            </div>
+            <div class="input-field">
+                <label>Phone</label>
+                <input type="number" name="phone" value="{{data.phone}}" readonly>
+            </div>
+            <div class="input-field">
+                <label>Message</label>
+                <textarea name="message" placeholder="Type your message..." required></textarea>
+            </div>
+            {% else %}
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-field">
+                <label>Phone</label>
+                <input type="number" name="phone" placeholder="Enter your phone" required>
+            </div>
+            <div class="input-field">
+                <label>Message</label>
+                <textarea name="message" placeholder="Type your message..." required></textarea>
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn-contact">Send Message</button>
+    </form>
+</div>
+
+{% if message %}
+<script>alert("{{message}}")</script>
+{% endif %}
+{% endblock %}

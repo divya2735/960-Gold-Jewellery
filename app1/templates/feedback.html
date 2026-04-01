@@ -1,0 +1,174 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+/* ===== Feedback Form Styling (Golden–Silver Luxury Theme) ===== */
+
+body {
+    background: #FFF9F0 !important;
+}
+
+/* Main Box */
+.feedback-container {
+    max-width: 750px;
+    margin: 70px auto;
+    padding: 45px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 2px solid #D4AF37; /* gold border */
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25); /* gold shadow */
+    transition: 0.3s ease;
+}
+
+.feedback-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
+}
+
+/* Header */
+.feedback-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.feedback-header h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #C59A4A; /* premium gold */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.feedback-header p {
+    font-size: 16px;
+    color: #6D5D4B;
+}
+
+/* Grid */
+.form-grid {
+    display: grid;
+    gap: 20px;
+}
+
+/* Labels */
+.input-field label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #C59A4A; /* gold label */
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Inputs & Textarea */
+.input-field input,
+.input-field textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.8px solid #C0C0C0; /* silver border */
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    background: #FFF;
+    color: #6D5D4B;
+    transition: 0.3s ease;
+}
+
+.input-field input:focus,
+.input-field textarea:focus {
+    border-color: #D4AF37; /* gold focus */
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.45);
+}
+
+textarea {
+    resize: none;
+    min-height: 130px;
+}
+
+/* Gold-Silver Button */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(120deg, #D4AF37, #B0B0B0); /* Gold → Silver */
+    box-shadow: 0 5px 12px rgba(212, 175, 55, 0.35);
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(120deg, #B0B0B0, #D4AF37); /* Reverse */
+    transform: scale(1.03);
+    box-shadow: 0 7px 18px rgba(212, 175, 55, 0.45);
+}
+</style>
+
+<div class="feedback-container">
+    <div class="feedback-header">
+        <h2>Feedback</h2>
+        <p>Your words help us shine brighter ✨</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+
+            {% if a %}
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" name="name" value="{{data.name}}" readonly>
+            </div>
+
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" value="{{data.email}}" readonly>
+            </div>
+
+            <div class="input-field">
+                <label>Phone</label>
+                <input type="number" name="phone" value="{{data.phone}}" readonly>
+            </div>
+
+            <div class="input-field">
+                <label>Feedback</label>
+                <textarea name="feedback" placeholder="Share your experience..." required></textarea>
+            </div>
+
+            {% else %}
+
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-field">
+                <label>Phone</label>
+                <input type="number" name="phone" placeholder="Enter your phone" required>
+            </div>
+
+            <div class="input-field">
+                <label>Feedback</label>
+                <textarea name="feedback" placeholder="Share your experience..." required></textarea>
+            </div>
+
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Feedback</button>
+    </form>
+</div>
+
+{% if message %}
+<script>alert("{{message}}")</script>
+{% endif %}
+
+{% endblock %}

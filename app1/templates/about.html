@@ -1,0 +1,272 @@
+{% extends 'common.html' %}
+{% block content %}
+{% load static %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #faf7f2, #f0ede7); /* Soft luxury beige */
+    color: #444;
+  }
+
+  :root {
+    --gold: linear-gradient(135deg, #d4af37, #f7e98e);
+    --silver: linear-gradient(135deg, #d7d7d7, #ffffff);
+    --glass: rgba(255,255,255,0.55);
+  }
+
+  /* HERO */
+  .about-hero {
+    height: 70vh;
+    background: url("{% static 'img/categories/about-hero.jpg' %}") center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+  .about-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(80,80,80,0.4));
+    backdrop-filter: blur(1px);
+}
+
+
+  .about-hero div {
+    position: relative;
+    z-index: 2;
+  }
+
+  .about-hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    background: var(--gold);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0px 3px 12px rgba(212,175,55,0.4);
+  }
+
+  .about-hero p {
+    font-size: 1.4rem;
+    color: #6d6d6d;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 70px 0;
+  }
+
+  .section h2 {
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 40px;
+    background: var(--gold);
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+  }
+
+  /* Story */
+  .story {
+    background: var(--glass);
+    padding: 40px;
+    border-radius: 18px;
+    max-width: 850px;
+    margin: auto;
+    border: 1px solid rgba(212,175,55,0.35);
+    box-shadow: 0 10px 30px rgba(212,175,55,0.15);
+    transition: 0.3s ease;
+  }
+
+  .story:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 45px rgba(212,175,55,0.25);
+  }
+
+  .story p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+
+  /* Mission Box */
+  .mission-box {
+    background: linear-gradient(135deg, #ffffff, #f7f3e8);
+    border: 2px solid rgba(212,175,55,0.35);
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: 0.4s;
+  }
+
+  .mission-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(212,175,55,0.35);
+  }
+
+  .mission-box i {
+    font-size: 3rem;
+    background: var(--gold);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+  }
+
+  /* Team */
+  .team-member {
+    background: #ffffff;
+    border: 1px solid rgba(212,175,55,0.3);
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(212,175,55,0.15);
+    transition: 0.3s ease;
+  }
+
+  .team-member:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 12px 35px rgba(212,175,55,0.25);
+  }
+
+  .team-member i {
+    background: var(--silver);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 3rem;
+  }
+
+  .team-member h5 {
+    color: #444;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+
+  .team-member p {
+    color: #777;
+  }
+
+  /* CTA */
+  .cta {
+    background: linear-gradient(135deg, #f8f4ec, #ffffff);
+    padding: 60px 30px;
+    border-radius: 18px;
+    max-width: 900px;
+    margin: 70px auto;
+    border: 1px solid rgba(212,175,55,0.4);
+    box-shadow: 0 10px 30px rgba(212,175,55,0.25);
+    text-align: center;
+  }
+
+  .cta h2 {
+    background: var(--gold);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: 900;
+  }
+
+  .cta button {
+    background: var(--gold);
+    padding: 14px 40px;
+    border: none;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+  }
+
+  .cta button:hover {
+    transform: scale(1.08);
+  }
+
+</style>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div>
+    <h1>960 Gold Jewellery</h1>
+    <p>Elegance • Luxury • Timeless Beauty ✨</p>
+  </div>
+</div>
+
+<!-- STORY -->
+<div class="section">
+  <div class="story">
+    <h2>Our Story</h2>
+    <p>
+      <b>960 Gold Jewellery</b> was born with a vision to bring luxury, purity,
+      and craftsmanship into your everyday elegance. Each jewel tells a story
+      of grace, artistry, and timeless beauty.
+    </p>
+    <p>
+      From delicate handcrafted designs to modern luxury pieces —
+      we create jewelry that celebrates your unique shine.
+    </p>
+  </div>
+</div>
+
+<!-- MISSION + VISION -->
+<div class="mission section">
+  <div class="container">
+    <h2>Our Mission & Vision</h2>
+    <div class="row text-center">
+      <div class="col-md-6 mb-4">
+        <div class="mission-box">
+          <i class="fa-solid fa-gem"></i>
+          <h5>Our Mission</h5>
+          <p>To craft jewelry that blends heritage craftsmanship with modern elegance.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="mission-box">
+          <i class="fa-solid fa-crown"></i>
+          <h5>Our Vision</h5>
+          <p>To become the most trusted global brand for luxury jewelry lovers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="team section container">
+  <h2>Meet Our Creative Team</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="team-member">
+        <i class="fa-solid fa-user-tie"></i>
+        <h5>Prinsi Prajapati</h5>
+        <p>Founder & Designer</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="team-member">
+        <i class="fa-solid fa-people-group"></i>
+        <h5>Arjun Malhotra</h5>
+        <p>Operations Head</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="team-member">
+        <i class="fa-solid fa-pen-nib"></i>
+        <h5>Simran Verma</h5>
+        <p>Design & Branding Lead</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Experience Luxury Like Never Before</h2>
+  <p>Discover jewelry that speaks your elegance.</p>
+  <button>Shop Now</button>
+</div>
+
+{% endblock %}

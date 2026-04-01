@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>960 Gold Jewellery | Products</title>
+
+  <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+<style>
+
+/* ----------------------------------
+   SAME SIDEBAR AS DASHBOARD
+---------------------------------- */
+.sidebar {
+    background-color: #d4af37 !important;
+    color: #fff !important;
+}
+.sidebar a {
+    color: #fff !important;
+    font-weight: 500;
+}
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: rgba(255,255,255,0.25) !important;
+    border-radius: 6px;
+}
+.logo-title {
+    color: white !important;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ----------------------------------
+   MAIN WRAPPER – FIX SPACING
+---------------------------------- */
+.main-wrapper {
+    background-color: #f9f4e8 !important;
+    min-height: 100vh;
+    padding: 35px;
+}
+
+/* REQUIRED — FIX GREY SPACE */
+.page-flex {
+    display: flex;
+}
+
+/* Titles */
+.main-title {
+    color: #7a5a12;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Add Product Button */
+.add-btn {
+    background: linear-gradient(90deg, #d4af37, #c5a043);
+    color: white !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.35);
+}
+
+/* Table */
+.posts-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #f2e6c7;
+}
+.posts-table th {
+    background: #fff8e6;
+    padding: 14px;
+    color: #7a5a12;
+    border-bottom: 1px solid #e6d9b5;
+}
+.posts-table td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    color: #4a4234;
+}
+
+/* Action Buttons */
+.btn-edit {
+    background: #f1d37a;
+    color: #4a3e23;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.btn-delete {
+    background: #f3f3f3;
+    color: #7a6f5a;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+
+</style>
+</head>
+
+
+<body>
+
+<div class="layer"></div>
+
+<div class="page-flex">
+
+  <!-- SIDEBAR (exactly same as dashboard) -->
+  <aside class="sidebar">
+      <div class="sidebar-start">
+        <div class="sidebar-head">
+          <a href="{% url 'index' %}" class="logo-wrapper">
+            <div class="logo-text">
+              <span class="logo-title">960 Gold Jewellery</span>
+              <span class="logo-subtitle">Admin</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="sidebar-body">
+          <ul class="sidebar-body-menu">
+            <li><a href="{% url 'admin_dashboard' %}"><span class="icon home"></span>Dashboard</a></li>
+            <li><a class="active" href="{% url 'product_list' %}"><span class="icon document"></span>Products</a></li>
+            <li><a href="{% url 'category_list' %}"><span class="icon document"></span>Categories</a></li>
+            <li><a href="{% url 'order_list' %}"><span class="icon document"></span>Orders</a></li>
+            <li><a href="{% url 'product_report' %}"><span class="icon document"></span>Product Report</a></li>
+            <li><a href="{% url 'user_list' %}"><span class="icon user-3"></span>Users</a></li>
+           </ul>
+        </div>
+    </div>
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR SAME AS DASHBOARD -->
+
+
+      <div class="top-bar">
+          <h2 class="main-title">All Products</h2>
+          <a href="{% url 'add_product' %}" class="add-btn">+ Add Product</a>
+      </div>
+
+      <div class="users-table table-wrapper">
+        <table class="posts-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Brand</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Available Stock</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td><img src="{{ product.img.url }}" width="55" style="border-radius:6px;"></td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.brand }}</td>
+              <td>{{ product.category.categoryname }}</td>
+              <td>₹{{ product.price }}</td>
+              <td>{{ product.quantity }}</td>
+
+              <td>
+                <a href="{% url 'product_edit' product.id %}" class="btn-edit">Edit</a>
+                <a href="{% url 'product_delete' product.id %}" class="btn-delete">Delete</a>
+              </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="7" style="text-align:center; padding:20px;">No products available</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+  </div>
+</div>
+
+</body>
+</html>

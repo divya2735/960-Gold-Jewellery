@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feedback List</title>
+  <link rel="stylesheet" href="{% static 'adminlte/dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper p-4">
+  <h2 class="mb-4">Customer Feedback</h2>
+  <table class="table table-striped">
+    <thead class="bg-danger text-white">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in feedbacks %}
+      <tr>
+        <td>{{ f.name }}</td>
+        <td>{{ f.email }}</td>
+        <td>{{ f.phone }}</td>
+        <td>{{ f.feedback }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="text-center">No feedback yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

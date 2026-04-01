@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h3>Processing Online Payment...</h3>
+  <button id="rzp-button" class="btn btn-success">Pay Now</button>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{ RAZORPAY_KEY_ID }}",
+    "amount": "{{ amount|floatformat:2 }}" * 100,
+    "currency": "INR",
+    "name": "Lace Up Shoes",
+    "description": "Order Payment",
+    "order_id": "{{ order_id }}",
+    "handler": function (response){
+        window.location.href = "{% url 'payment_success' %}?payment_id=" + response.razorpay_payment_id;
+    }
+};
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+{% endblock %}

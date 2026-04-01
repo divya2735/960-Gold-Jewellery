@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Payment</title>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f6f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 40px;
+            width: 380px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: 26px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        #rzp-button {
+            background: #d4af37;
+            color: #fff;
+            border: none;
+            padding: 14px 20px;
+            width: 100%;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        #rzp-button:hover {
+            background: #b38a2e;
+        }
+
+        .secure-text {
+            margin-top: 15px;
+            font-size: 13px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="payment-card">
+    <h3>Pay Securely</h3>
+    <p>Total Amount: <strong>₹{{ amount }}</strong></p>
+
+    <button id="rzp-button">Pay Now</button>
+
+    <p class="secure-text">🔒 100% Secure Payment via Razorpay</p>
+</div>
+
+<!-- Hidden FORM to send payment details to Django -->
+<form id="payment-form" method="POST" action="{% url 'user_payment' %}" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
+    <input type="hidden" id="razorpay_order_id" name="razorpay_order_id">
+    <input type="hidden" id="razorpay_signature" name="razorpay_signature">
+</form>
+
+<script>
+var options = {
+    "key": "{{ key }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "order_id": "{{ order_id }}",
+
+    "handler": function (response){
+        // Fill hidden form for backend verification
+        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+        document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+        document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+        // Submit form -> calls user_payment view -> saves order -> redirects to order_success.html
+        document.getElementById('payment-form').submit();
+    },
+
+    "theme": {"color": "#d4af37"}
+};
+
+var rzp1 = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+</body>
+</html>

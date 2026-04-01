@@ -1,0 +1,361 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    /* ----------- Golden Theme Styling ----------- */
+    .profile-container {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 40px;
+        background: #fffdf5;
+        border-radius: 18px;
+        border: 2px solid #d4af37;
+        box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+    }
+
+    .profile-header h1 {
+        text-align: center;
+        font-size: 36px;
+        font-weight: 800;
+        color: #c59a4a;
+        letter-spacing: 1px;
+    }
+
+    .profile-info p {
+        font-size: 18px;
+        color: #5d4b36;
+        margin: 6px 0;
+    }
+
+    .profile-info strong {
+        color: #c59a4a;
+    }
+
+    /* ---------- Table Styling ---------- */
+    .table-responsive {
+        margin-top: 25px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1.5px solid #c59a4a;
+    }
+
+    .table {
+        width: 100%;
+        background: #fffdf5;
+    }
+
+    .table thead {
+        background: linear-gradient(to right, #d4af37, #c59a4a);
+        color: white;
+        text-transform: uppercase;
+        font-size: 15px;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid #e8d8b9;
+    }
+
+    .table tbody tr:hover {
+        background-color: #fff7e6;
+    }
+
+    .table td,
+    .table th {
+        padding: 14px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /* Product Images */
+    .table img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #c59a4a;
+    }
+
+    /* No orders text */
+    .no-orders {
+        font-size: 17px;
+        text-align: center;
+        color: #8c7a56;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+        display: block;
+        margin: 30px auto 0;
+        padding: 12px 28px;
+        font-size: 18px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #c59a4a, #d4af37);
+        border: none;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .logout-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Address Styling */
+    .address-section {
+        margin-top: 30px;
+    }
+
+    .address-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 15px;
+    }
+
+    .address-card {
+        background: #fff;
+        border: 1px solid #e8d8b9;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(212, 175, 55, 0.1);
+        position: relative;
+    }
+
+    .address-card h5 {
+        color: #c59a4a;
+        font-weight: 700;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #f4ecd8;
+        padding-bottom: 8px;
+    }
+
+    .address-card p {
+        font-size: 15px;
+        color: #5d4b36;
+        margin: 4px 0;
+    }
+
+    .delete-address-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .delete-address-btn:hover {
+        background: #c82333;
+    }
+
+    .add-address-btn {
+        display: inline-block;
+        background: #c59a4a;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 200;
+        margin-bottom: 15px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .add-address-btn:hover {
+        background: #b28a3f;
+        color: white;
+    }
+
+    .address-form-container {
+        background: #fffdf5;
+        border: 1px solid #d4af37;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .address-form-container input,
+    .address-form-container select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #e8d8b9;
+        border-radius: 6px;
+    }
+
+    .save-address-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .cancel-address-btn {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="profile-container">
+
+    <div class="profile-header">
+        <h1>User Profile</h1>
+    </div>
+
+    <div class="profile-info">
+        <p><strong>Username:</strong> {{ profile.name }}</p>
+        <p><strong>Email:</strong> {{ profile.email }}</p>
+        <p><strong>Contact:</strong> {{ profile.phone }}</p>
+    </div>
+
+    <br>
+
+    <!-- Address Section -->
+    <div class="address-section">
+        <h2 style="color:#c59a4a; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+            Saved Addresses
+            <button type="button" class="add-address-btn" onclick="toggleAddressForm()">+ Add New Address</button>
+        </h2>
+
+        <!-- Messages Display (for success/error) -->
+        {% if messages %}
+        <div class="messages mb-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"
+                style="border-radius: 8px;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Add Address Form -->
+        <div class="address-form-container" id="addressForm">
+            <form action="{% url 'add_address' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Address Label (e.g., Home, Office)</label>
+                        <select name="label" required>
+                            <option value="Home">Home</option>
+                            <option value="Office">Office</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label>Street Address</label>
+                        <input type="text" name="street" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>City</label>
+                        <input type="text" name="city" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>State</label>
+                        <input type="text" name="state" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Country</label>
+                        <input type="text" name="country" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Pincode</label>
+                        <input type="text" name="pincode" required>
+                    </div>
+                </div>
+                <button type="submit" class="save-address-btn">Save Address</button>
+                <button type="button" class="cancel-address-btn" onclick="toggleAddressForm()">Cancel</button>
+            </form>
+        </div>
+
+        <div class="address-grid">
+            {% for addr in addresses %}
+            <div class="address-card">
+                <h5>{{ addr.label }}</h5>
+                <p>{{ addr.street }}</p>
+                <p>{{ addr.city }}, {{ addr.state }}</p>
+                <p>{{ addr.country }} - {{ addr.pincode }}</p>
+                <form action="{% url 'delete_address' addr.id %}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this address?');">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-address-btn"><i class="fa fa-trash"></i> Delete</button>
+                </form>
+            </div>
+            {% empty %}
+            <p style="color: #8c7a56; width: 100%; margin-top: 10px;">You haven't saved any addresses yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr style="border-color: #e8d8b9; margin: 40px 0;">
+
+    <h2 style="color:#c59a4a; font-weight:700; margin-top:20px;">Orders Placed</h2>
+
+    {% if orders %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Name</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><img src="{{ order.img.url }}"></td>
+                    <td>{{ order.name }}</td>
+                    <td>{{ order.productqty }}</td>
+                    <td>₹{{ order.orderAmount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="no-orders">No orders found.</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="logout" class="logout-btn">Logout</button>
+    </form>
+
+</div>
+
+<script>
+    function toggleAddressForm() {
+        var form = document.getElementById("addressForm");
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}

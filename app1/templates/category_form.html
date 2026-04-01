@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | 960 Gold Jewellery</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+  
+  <!-- Bootstrap & Font Awesome & Admin Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold-primary: #d4af37;
+      --gold-dark: #b8860b;
+      --gold-light: #f2e6c7;
+      --bg-light: #f9f4e8;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ----------------------------------
+       SIDEBAR – MATCH DASHBOARD EXACTLY
+    ---------------------------------- */
+    .sidebar {
+        background-color: #d4af37 !important;
+        color: #fff !important;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+    .sidebar a {
+        color: #fff !important;
+        font-weight: 500;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+        background-color: rgba(255,255,255,0.25) !important;
+        border-radius: 6px;
+    }
+    .logo-title {
+        color: white !important;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 1px;
+    }
+    .logo-subtitle {
+        color: rgba(255,255,255,0.8);
+        font-size: 14px;
+    }
+    
+    /* Circle Avatars */
+    .circle-avatar {
+        background-color: #f2e6c7;
+        color: #6d4e00;
+        border: 2px solid #d4af37;
+        font-weight: bold;
+        text-transform: uppercase;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ----------------------------------
+       FORM CARD STYLING
+    ---------------------------------- */
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--gold-light);
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-header {
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      padding: 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .form-header h2 { margin: 0; font-weight: 700; }
+    .form-header i { font-size: 2.5rem; margin-bottom: 15px; opacity: 0.9; }
+
+    .form-body { padding: 35px; }
+
+    .form-body label {
+      display: block;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .form-body input[type="text"],
+    .form-body input[type="number"],
+    .form-body textarea,
+    .form-body select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e8dcc8;
+      border-radius: 10px;
+      background: #fffdf8;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .form-body input:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .btn-save {
+      background: linear-gradient(90deg, var(--gold-primary), var(--gold-dark));
+      color: white !important;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-cancel {
+      background: #f3f3f3;
+      color: #666;
+      padding: 14px 25px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-flex">
+
+  <!-- SIDEBAR (Identical to Dashboard) -->
+  <aside class="sidebar">
+    <div class="sidebar-start">
+      <div class="sidebar-head">
+        <a href="{% url 'index' %}" class="logo-wrapper">
+          <div class="logo-text">
+            <span class="logo-title">960 Gold Jewellery</span>
+            <span class="logo-subtitle">Admin</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-body">
+        <ul class="sidebar-body-menu">
+          <li><a href="{% url 'admin_dashboard' %}"><span class="icon home"></span>Dashboard</a></li>
+          <li><a href="{% url 'product_list' %}"><span class="icon document"></span>Products</a></li>
+          <li><a class="active" href="{% url 'category_list' %}"><span class="icon document"></span>Categories</a></li>
+          <li><a href="{% url 'order_list' %}"><span class="icon document"></span>Orders</a></li>
+          <li><a href="{% url 'product_report' %}"><span class="icon document"></span>Product Report</a></li>
+          <li><a href="{% url 'user_list' %}"><span class="icon user-3"></span>Users</a></li>
+          <li><a href="{% url 'logout1' %}" style="color: #ffcccc !important;"><span class="icon logout"></span>Logout</a></li>
+         </ul>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <a class="sidebar-user">
+        <span class="sidebar-user-img">
+          <div class="circle-avatar">A</div>
+        </span>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user__title">{{ request.user.username }}</span>
+          <span class="sidebar-user__subtitle">Administrator</span>
+        </div>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+      <div class="form-card">
+          <div class="form-header">
+              <i class="fas {% if 'Edit' in title %}fa-edit{% else %}fa-plus-circle{% endif %}"></i>
+              <h2>{{ title }}</h2>
+          </div>
+          
+          <div class="form-body">
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                  <div class="mb-4">
+                      <label for="{{ field.id_for_label }}">
+                        <i class="fas fa-caret-right text-warning me-2"></i>{{ field.label }}
+                      </label>
+                      {{ field }}
+                      {% if field.help_text %}<small class="text-muted d-block mt-1">{{ field.help_text }}</small>{% endif %}
+                  </div>
+                {% endfor %}
+
+                <div class="d-flex gap-3 mt-4">
+                  <button type="submit" class="btn-save flex-grow-1">
+                    <i class="fas fa-check-circle me-2"></i> {% if 'Edit' in title %}Update Category{% else %}Create Category{% endif %}
+                  </button>
+                  <a href="{% url 'category_list' %}" class="btn-cancel text-center">Cancel</a>
+                </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

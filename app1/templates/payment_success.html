@@ -1,0 +1,161 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fff5f5;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .order-success-container {
+    max-width: 850px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15);
+    text-align: center;
+    border: 1px solid #ffe5e5;
+  }
+
+  .checkmark-circle {
+    width: 100px;
+    height: 100px;
+    background: #ff4d4d;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+    margin-bottom: 20px;
+  }
+
+  .checkmark-circle i {
+    color: white;
+    font-size: 50px;
+  }
+
+  h2 {
+    color: #ff1a1a;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  .order-details {
+    background: #fff7f7;
+    border: 1px solid #ffd1d1;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 30px;
+  }
+
+  .order-details p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+  }
+
+  .product-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid #ffd1d1;
+    border-radius: 12px;
+    background: #fffafa;
+    margin-bottom: 10px;
+  }
+
+  .product-card img {
+    height: 80px;
+    width: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .product-details h5 {
+    margin: 0;
+    font-size: 1rem;
+    color: #d10000;
+    font-weight: 600;
+  }
+
+  .product-details p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .btn-container {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .btn-red {
+    background: linear-gradient(135deg, #ff4b2b, #ff1a1a);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .btn-red:hover {
+    background: linear-gradient(135deg, #ff1a1a, #ff4b2b);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    border: 2px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 10px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .btn-outline:hover {
+    background: #ff4d4d;
+    color: #fff;
+  }
+
+</style>
+<br>
+<br>
+<br>
+
+<div class="order-success-container">
+  <div class="checkmark-circle">
+    <i class="fas fa-check"></i>
+  </div>
+
+  <h2>Thank You for Your Order!</h2>
+  <p>Your order has been placed successfully with <strong>US</strong>. 🎉</p>
+
+ </div>
+
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- Font Awesome for checkmark -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+{% endblock %}
+
+

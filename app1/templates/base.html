@@ -1,0 +1,1321 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>960 Gold Jewellery</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #fffdf8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ═════════════════════════════════════════════════════
+           CREATIVE NAVBAR WITH USER DROPDOWN
+           ═════════════════════════════════════════════════════ */
+
+        .navbar {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9F0 100%) !important;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+            border-bottom: 3px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+            overflow: visible;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            animation: navbar-shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes navbar-shimmer {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Brand Logo */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: #d4af37 !important;
+            margin-right: 30px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.08);
+        }
+
+        .navbar-brand-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            animation: logo-shine 3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar-brand-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine-rotate 2s infinite;
+        }
+
+        @keyframes shine-rotate {
+            0% {
+                transform: translate(-100%, -100%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+
+        @keyframes logo-shine {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+            }
+        }
+
+        .navbar-brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            line-height: 1;
+        }
+
+        .navbar-brand-text .main {
+            font-size: 18px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand-text .sub {
+            font-size: 11px;
+            color: #c59a4a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation Links */
+        .navbar-nav {
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: #866543 !important;
+            font-weight: 600;
+            padding: 10px 16px !important;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            transition: left 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(212, 175, 55, 0.05);
+            z-index: -1;
+            transition: left 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #d4af37 !important;
+            transform: translateY(-3px);
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover::after {
+            left: 0;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            background: white;
+            border: 1.5px solid #f2e6c7;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 12px 0;
+            animation: dropdown-appear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes dropdown-appear {
+            from {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown-item {
+            color: #866543;
+            padding: 14px 24px;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.08), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
+            color: #d4af37;
+            border-left-color: #d4af37;
+            padding-left: 28px;
+            transform: translateX(4px);
+        }
+
+        .dropdown-item i {
+            font-size: 14px;
+            color: #d4af37;
+            min-width: 20px;
+        }
+
+        /* ═════════════════════════════════════════════════════
+           USER DROPDOWN MENU
+           ═════════════════════════════════════════════════════ */
+
+        .user-dropdown {
+            position: relative;
+            margin-left: auto;
+        }
+
+        .user-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            color: #866543;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-dropdown-toggle:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            color: #d4af37;
+            transform: scale(1.05);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown-toggle:hover .user-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1.5px solid #f2e6c7;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 12px 0;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-top: 8px;
+            z-index: 1001;
+        }
+
+        .user-dropdown:hover .user-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .user-dropdown-item {
+            color: #866543;
+            padding: 14px 24px;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .user-dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.08), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .user-dropdown-item:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
+            color: #d4af37;
+            border-left-color: #d4af37;
+            padding-left: 28px;
+            transform: translateX(4px);
+        }
+
+        .user-dropdown-item i {
+            font-size: 14px;
+            color: #d4af37;
+            min-width: 20px;
+        }
+
+        /* Divider */
+        .dropdown-divider-custom {
+            height: 1px;
+            background: #f2e6c7;
+            margin: 8px 0;
+        }
+
+        /* Hamburger Menu */
+        .navbar-toggler {
+            border: none;
+            padding: 8px 12px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-width='2' d='M7 7l16 16M23 7L7 23'/%3e%3c/svg%3e");
+        }
+
+        /* Gold Button */
+        .btn-gold {
+            background: linear-gradient(90deg, #d4af37, #b8860b);
+            border: none;
+            padding: 12px 28px;
+            color: white;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(90deg, #b8860b, #d4af37);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Carousel Text */
+        .carousel-caption h1 {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+            font-size: 3rem;
+            font-weight: 700;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .carousel-caption p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #FFF0DB;
+            padding: 40px 0;
+            margin-top: 70px;
+            border-top: 2px solid #d4af37;
+        }
+
+        footer a {
+            color: #8a6f4d;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar-brand {
+                margin-right: 20px;
+            }
+
+            .nav-link {
+                padding: 10px 14px !important;
+                font-size: 15px;
+            }
+
+            .navbar-brand-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .navbar-brand-text .main {
+                font-size: 15px;
+            }
+
+            .navbar-brand-text .sub {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 8px 0;
+            }
+
+            .navbar-brand-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .nav-link {
+                padding: 10px 12px !important;
+                font-size: 14px;
+            }
+
+            .navbar-nav {
+                gap: 5px;
+            }
+
+            .user-dropdown-toggle {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+
+            .user-dropdown-menu {
+                min-width: 180px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 6px 0;
+            }
+
+            .navbar-brand-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .nav-link {
+                padding: 8px 10px !important;
+                font-size: 13px;
+            }
+
+            .navbar-brand-text .main {
+                font-size: 13px;
+            }
+
+            .user-dropdown-toggle {
+                font-size: 12px;
+                gap: 6px;
+                padding: 6px 8px;
+            }
+
+            .user-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================= NAVBAR ========================= -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid px-3 px-lg-5">
+            <!-- Brand Logo -->
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <div class="navbar-brand-icon">💎</div>
+                <div class="navbar-brand-text">
+                    <span class="main">960 Gold</span>
+                    <span class="sub">Jewellery</span>
+                </div>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+
+                    <!-- Category Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ring"></i> Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for cat in categories %}
+                            <li><a class="dropdown-item" href="{% url 'productfilter1' cat.id %}">
+                                    <i class="fas fa-gem"></i>
+                                    {{ cat.categoryname }}
+                                </a></li>
+                            {% empty %}
+                            <li><a class="dropdown-item" href="#" style="color: #999;">No categories available</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'productall' %}">
+                            <i class="fas fa-gem"></i> Products
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle"></i> About Us
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'feedback' %}">
+                            <i class="fas fa-star"></i> Feedback
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
+                    </li>
+
+                    <!-- Watchlist Link (if logged in) -->
+                    {% if request.session.email %}
+                    <li class="nav-item">
+                        <a class="nav-link watchlist-link" href="{% url 'watchlist' %}" title="My Watchlist">
+                            <i class="fas fa-heart"></i> Watchlist
+                            {% if watchlist_count > 0 %}
+                            <span class="watchlist-badge"
+                                style="background: #d4af37; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">{{
+                                watchlist_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <!-- USER DROPDOWN MENU -->
+                    {% if request.session.email %}
+                    <li class="nav-item user-dropdown">
+                        <button class="user-dropdown-toggle">
+                            <div class="user-avatar">
+                                {{ request.user.username|first|upper }}
+                            </div>
+                            <span class="d-none d-lg-inline">{{ request.user.username|truncatechars:12 }}</span>
+                            <i class="fas fa-chevron-down" style="font-size: 11px;"></i>
+                        </button>
+
+                        <!-- User Dropdown Menu -->
+                        <div class="user-dropdown-menu">
+                            <a href="{% url 'profile' %}" class="user-dropdown-item">
+                                <i class="fas fa-user"></i> My Profile
+                            </a>
+                            <a href="{% url 'cart' %}" class="user-dropdown-item">
+                                <i class="fas fa-shopping-cart"></i> Cart
+                            </a>
+                            <a href="{% url 'myorder' %}" class="user-dropdown-item">
+                                <i class="fas fa-shopping-bag"></i> My Orders
+                            </a>
+                            <a href="{% url 'change' %}" class="user-dropdown-item">
+                                <i class="fas fa-key"></i> Change Password
+                            </a>
+                            <div class="dropdown-divider-custom"></div>
+                            <a href="{% url 'logout1' %}" class="user-dropdown-item"
+                                style="color: #e74c3c; border-left-color: #e74c3c;">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+
+                    {% else %}
+                    <!-- LOGIN BUTTON -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login1' %}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================= SLIDER ========================= -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+
+        <div class="carousel-inner">
+
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <img src="{% static 'img/categories/gold1.webp' %}" class="d-block w-100"
+                    style="height:700px; object-fit:cover; filter:brightness(85%);">
+
+                <div class="carousel-caption">
+                    <h1 class="fw-bold">✨ Elegance Crafted in Gold</h1>
+                    <p>Explore our handcrafted jewellery</p>
+                    <a href="#categories" class="btn-gold">🛍️ Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <img src="{% static 'img/categories/gold2.webp' %}" class="d-block w-100"
+                    style="height:700px; object-fit:cover; filter:brightness(85%);">
+
+                <div class="carousel-caption">
+                    <h1 class="fw-bold">💎 Timeless Diamond Collection</h1>
+                    <p>Luxury that lasts forever</p>
+                    <a href="#categories" class="btn-gold">✨ Explore</a>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <img src="{% static 'img/categories/gold3.webp' %}" class="d-block w-100"
+                    style="height:700px; object-fit:cover; filter:brightness(85%);">
+
+                <div class="carousel-caption">
+                    <h1 class="fw-bold">👑 Finest Craftsmanship</h1>
+                    <p>Beautifully designed for every occasion</p>
+                    <a href="#categories" class="btn-gold">📿 View Collection</a>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+    </div>
+
+    <!-- ========================= PAGE CONTENT ========================= -->
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Categories Section -->
+    <div id="categories" class="container py-5">
+
+        <h2 class="text-center section-title fw-bold"
+            style="color:#C59A4A; letter-spacing:1px; font-size: 2.5rem; margin-bottom: 50px;">
+            ✨ Explore Our Collection
+        </h2>
+
+        <div class="row mt-4">
+            {% for i in data %}
+            <div class="col-md-4 col-lg-3 mb-4">
+
+                <div class="card shadow-lg h-100 rounded-4 position-relative"
+                    style="border:1px solid #D9D9D9; transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;"
+                    onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.25)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px rgba(0, 0, 0, 0.1)';">
+
+                    <img src="{{ i.img.url }}" class="card-img-top" alt="{{ i.categoryname }}" style="height:250px; object-fit:cover;
+                            border-top-left-radius: 15px;
+                            border-top-right-radius: 15px;
+                            transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)';"
+                        onmouseout="this.style.transform='scale(1)';">
+
+                    <div class="card-body text-center">
+
+                        <h5 class="card-title fw-semibold" style="color:#6D5D4B; font-size: 1.1rem;">
+                            {{ i.categoryname }}
+                        </h5>
+
+                        <!-- GOLD BUTTON -->
+                        <a href="{% url 'productfilter1' i.id %}" class="mt-3 px-4 py-2 fw-bold rounded-pill" style="
+                            background: linear-gradient(90deg, #D4AF37, #C0C0C0);
+                            color:white;
+                            text-decoration:none;
+                            display:inline-block;
+                            border:none;
+                            transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+                       " onmouseover="this.style.boxShadow='0 8px 20px rgba(212, 175, 55, 0.4)'; this.style.transform='translateY(-2px)';"
+                            onmouseout="this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.25)'; this.style.transform='translateY(0)';">
+                            👉 View Products
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- =================== ABOUT SECTION =================== -->
+    <div class="py-5" style="background:#FFF9F0;">
+        <div class="container about-section text-center">
+
+            <h2 class="section-title fw-bold"
+                style="color:#C59A4A; letter-spacing:1px; font-size:2.2rem; margin-bottom: 30px;">
+                💍 About 960 Gold Jewellery
+            </h2>
+
+            <p class="mx-auto mt-3" style="max-width: 780px; font-size:1.15rem; color:#6D5D4B; line-height:1.8;">
+                At <b>960 Gold Jewellery</b>, every piece is crafted with passion, artistry, and the
+                timeless elegance of <span style="color:#C59A4A;"><b>gold</b></span> and
+                <span style="color:#B0B0B0;"><b>silver</b></span>.
+                From delicate necklaces to breathtaking rings and heirloom collections,
+                our jewellery blends tradition with modern luxury.
+                With <b>thousands of delighted customers</b> across India, we continue to be a trusted
+                destination for those who seek beauty, purity, and premium craftsmanship.
+            </p>
+
+            <!-- FULL WIDTH IMAGE INSIDE CONTAINER -->
+            <div class="about-image-wrapper mt-4 mx-auto" style="
+            width:100%;
+            max-width:900px;
+            border-radius:20px;
+            overflow:hidden;
+            box-shadow:0 10px 40px rgba(212, 175, 55, 0.15);
+            transition: all 0.3s ease;
+         " onmouseover="this.style.boxShadow='0 15px 50px rgba(212, 175, 55, 0.25)'; this.style.transform='scale(1.02)';"
+                onmouseout="this.style.boxShadow='0 10px 40px rgba(212, 175, 55, 0.15)'; this.style.transform='scale(1)';">
+                <img src="{% static 'img/categories/about_jewels.jpeg' %}" alt="About 960 Gold Jewellery" style="
+                width:100%;
+                height:420px;
+                object-fit:cover;
+                display:block;
+             ">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =================== FEATURES SECTION =================== -->
+    <div class="container py-5">
+        <h2 class="text-center section-title fw-bold"
+            style="color:#C59A4A; letter-spacing:1px; margin-bottom: 50px; font-size: 2.2rem;">
+            ⭐ Why Shop With Us?
+        </h2>
+
+        <div class="row text-center mt-4">
+
+            <!-- Feature 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="feature-box p-4 rounded-4 shadow-sm"
+                    style="background:#FFF7E6; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                    onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.25)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';">
+                    <i class="fa-solid fa-gem" style="font-size:50px; color:#D4AF37;"></i>
+                    <h5 class="fw-bold mt-3" style="color:#6D5D4B;">💎 Premium Craftsmanship</h5>
+                    <p style="color:#8a6f4d;">
+                        Handcrafted gold & silver jewellery made with precision and passion.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="feature-box p-4 rounded-4 shadow-sm"
+                    style="background:#FFF7E6; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                    onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.25)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';">
+                    <i class="fa-solid fa-crown" style="font-size:50px; color:#C0C0C0;"></i>
+                    <h5 class="fw-bold mt-3" style="color:#6D5D4B;">👑 Exclusive Designs</h5>
+                    <p style="color:#8a6f4d;">
+                        Unique royal-inspired collections you won't find anywhere else.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="feature-box p-4 rounded-4 shadow-sm"
+                    style="background:#FFF7E6; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                    onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.25)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';">
+                    <i class="fa-solid fa-truck-fast" style="font-size:50px; color:#D4AF37;"></i>
+                    <h5 class="fw-bold mt-3" style="color:#6D5D4B;">🚚 Secure & Fast Delivery</h5>
+                    <p style="color:#8a6f4d;">
+                        Safe packaging with doorstep delivery across India.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================= FOOTER ========================= -->
+    <footer>
+        <div class="container text-center">
+
+            <h3 class="fw-bold" style="color:#C19A6B; letter-spacing:2px; margin-bottom: 15px;">💎 960 Gold Jewellery
+            </h3>
+            <p style="color:#8a6f4d; max-width:600px; margin:auto;">
+                Premium handcrafted jewellery made with love, purity and elegance.
+            </p>
+
+            <hr style="margin:20px auto; width:60%; border-color:#d5b48c;">
+
+            <!-- ✅ FIXED FOOTER LINKS WITH DROPDOWN CATEGORIES -->
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: center;">
+                <a href="{% url 'index' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                    🏠 Home
+                </a>
+
+                <!-- CATEGORIES DROPDOWN -->
+                <div class="dropdown" style="position: relative; display: inline-block;">
+                    <button class="btn btn-sm" type="button"
+                        style="background: none; border: none; color: #8a6f4d; font-size: 16px; cursor: pointer; transition: 0.3s;"
+                        id="footerCategoriesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        📂 Categories ▼
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="footerCategoriesDropdown" style="min-width: 200px;">
+                        {% for cat in categories %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'productfilter1' cat.id %}"
+                                style="padding: 10px 15px; color: #333; text-decoration: none; transition: 0.3s;">
+                                <i class="fas fa-sparkles" style="color: #d4af37;"></i>
+                                {{ cat.categoryname }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <a class="dropdown-item" href="#" style="padding: 10px 15px; color: #999;">
+                                No categories available
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <a href="{% url 'productall' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                    💍 All Jewellery
+                </a>
+
+                <a href="{% url 'contact' %}" style="color: #8a6f4d; text-decoration: none; transition: 0.3s;">
+                    💌 Contact
+                </a>
+            </div>
+
+            <p class="mt-3" style="color:#A18463; font-size:0.9rem;">
+                © 2026 960 Gold Jewellery · All Rights Reserved ✨
+            </p>
+
+        </div>
+    </footer>
+
+    <!-- ========================= REGISTER POPUP MODAL ========================= -->
+    {% if not request.session.email %}
+    <style>
+        /* ═════════════════════════════════════════════════════
+           REGISTRATION POPUP MODAL — GOLD THEME
+           ═════════════════════════════════════════════════════ */
+        .reg-popup-overlay {
+            position: fixed;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .reg-popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reg-popup-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            z-index: 9999;
+            width: 420px;
+            max-width: 92vw;
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.25), 0 0 0 2px rgba(212, 175, 55, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reg-popup-modal.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Close Button */
+        .reg-popup-close {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: rgba(255,255,255,0.25);
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+        .reg-popup-close:hover {
+            background: rgba(255,255,255,0.45);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* Header */
+        .reg-popup-header {
+            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+            padding: 30px 28px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .reg-popup-header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.12), transparent);
+            animation: regPopupShine 3s infinite;
+        }
+        @keyframes regPopupShine {
+            0% { transform: translate(-100%, -100%) rotate(0deg); }
+            100% { transform: translate(100%, 100%) rotate(45deg); }
+        }
+
+        .reg-popup-header-icon {
+            width: 65px; height: 65px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 32px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .reg-popup-header h3 {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 0;
+            position: relative;
+        }
+        .reg-popup-header p {
+            color: rgba(255,255,255,0.88);
+            font-size: 0.88rem;
+            margin: 8px 0 0;
+            position: relative;
+        }
+
+        /* Body */
+        .reg-popup-body {
+            padding: 25px 28px 28px;
+            text-align: center;
+        }
+
+        .reg-popup-benefits {
+            text-align: left;
+            margin-bottom: 22px;
+        }
+        .reg-popup-benefits li {
+            list-style: none;
+            padding: 8px 0;
+            font-size: 0.92rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .reg-popup-benefits li i {
+            color: #d4af37;
+            font-size: 16px;
+            min-width: 20px;
+        }
+
+        .reg-popup-btn-primary {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .reg-popup-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: transform 0.5s;
+            transform: translateX(-100%);
+        }
+        .reg-popup-btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+        .reg-popup-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            color: #fff;
+        }
+
+        .reg-popup-btn-secondary {
+            display: inline-block;
+            margin-top: 14px;
+            color: #866543;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .reg-popup-btn-secondary:hover {
+            color: #d4af37;
+        }
+
+        .reg-popup-divider {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+            gap: 10px;
+        }
+        .reg-popup-divider::before,
+        .reg-popup-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8dcc8;
+        }
+        .reg-popup-divider span {
+            color: #bbb;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .reg-popup-modal { width: 95vw; }
+            .reg-popup-header { padding: 22px 20px 18px; }
+            .reg-popup-body { padding: 18px 20px 22px; }
+            .reg-popup-header h3 { font-size: 1.2rem; }
+        }
+    </style>
+
+    <!-- Popup Overlay -->
+    <div class="reg-popup-overlay" id="regPopupOverlay"></div>
+
+    <!-- Popup Modal -->
+    <div class="reg-popup-modal" id="regPopupModal">
+        <button class="reg-popup-close" id="regPopupClose" title="Close">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="reg-popup-header">
+            <div class="reg-popup-header-icon-container">
+                <div class="reg-popup-header-icon">💎</div>
+            </div>
+            <h3>Join 960 Gold Jewellery</h3>
+            <p>Create an account to unlock exclusive benefits!</p>
+        </div>
+
+        <div class="reg-popup-body">
+            <ul class="reg-popup-benefits">
+                <li><i class="fas fa-check-circle"></i> Exclusive offers & early access to new arrivals</li>
+                <li><i class="fas fa-check-circle"></i> Save products to your Watchlist</li>
+                <li><i class="fas fa-check-circle"></i> Track your orders in real-time</li>
+                <li><i class="fas fa-check-circle"></i> Apply coupons & get special discounts</li>
+            </ul>
+
+            <a href="{% url 'register1' %}" class="reg-popup-btn-primary">
+                <i class="fas fa-user-plus"></i> Register Now — It's Free!
+            </a>
+
+            <div class="reg-popup-divider"><span>or</span></div>
+
+            <a href="{% url 'login1' %}" class="reg-popup-btn-secondary">
+                Already have an account? <strong>Login</strong>
+            </a>
+        </div>
+    </div>
+
+    <script>
+    // Show registration popup after 5 seconds — ONLY ONCE per browser session
+    (function() {
+        var regPopupOverlay = document.getElementById('regPopupOverlay');
+        var regPopupModal = document.getElementById('regPopupModal');
+        
+        // Skip if user already saw the popup in this session
+        if (!sessionStorage.getItem('regPopupShown')) {
+            setTimeout(function() {
+                if (regPopupOverlay && regPopupModal) {
+                    regPopupOverlay.classList.add('show');
+                    regPopupModal.classList.add('show');
+                    sessionStorage.setItem('regPopupShown', 'true');
+                }
+            }, 5000); // 5 seconds delay
+        }
+
+        // Close popup
+        window.closeRegPopup = function() {
+            if (regPopupOverlay) regPopupOverlay.classList.remove('show');
+            if (regPopupModal) regPopupModal.classList.remove('show');
+        };
+
+        if (document.getElementById('regPopupClose')) {
+            document.getElementById('regPopupClose').addEventListener('click', window.closeRegPopup);
+        }
+        if (regPopupOverlay) {
+            regPopupOverlay.addEventListener('click', window.closeRegPopup);
+        }
+
+        // GUEST ACTION INTERCEPTOR
+        function handleGuestBlockedAction(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            alert("First you need to Register/Login after you will access");
+            
+            // Show the modal immediately
+            if (regPopupOverlay && regPopupModal) {
+                regPopupOverlay.classList.add('show');
+                regPopupModal.classList.add('show');
+            }
+            
+            // Redirect to Home after 4.5 seconds
+            setTimeout(function() {
+                window.location.href = "{% url 'index' %}";
+            }, 4500);
+        }
+
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            var isBlocked = target.closest('.add-to-cart, #addToCartBtn, #buyButton, .watchlist-btn, .watchlist-btn-detail, .btn-submit, .btn-contact');
+            
+            if (isBlocked) {
+                handleGuestBlockedAction(e);
+            }
+        }, true); // Use capture phase
+
+        // Also intercept form submissions (e.g. if Enter is pressed)
+        document.addEventListener('submit', function(e) {
+            var target = e.target;
+            // Check if form contains any of the blocked buttons OR is a feedback/contact form
+            var hasBlockedButton = target.querySelector('.btn-submit, .btn-contact, #buyButton');
+            
+            if (hasBlockedButton) {
+                handleGuestBlockedAction(e);
+            }
+        }, true);
+
+    })();
+    </script>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

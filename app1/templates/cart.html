@@ -1,0 +1,93 @@
+{% extends 'common.html' %}
+<style>
+  .cart-img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;   /* keeps aspect ratio while filling */
+    border-radius: 10px; /* smooth rounded corners */
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.2); /* soft shadow */
+    border: 2px solid #f5f5f5; /* subtle border */
+    background: #fff;
+    padding: 5px;        /* white padding around image */
+    transition: transform 0.2s ease-in-out;
+}
+
+.cart-img:hover {
+    transform: scale(1.05); /* zoom-in effect on hover */
+}
+
+</style>
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Your Shopping Cart</h2>
+
+  {% if items %}
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+           <th>Product Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+          <td>
+  <img src="{{ item.product.img.url }}"
+       alt="{{ item.product.name }}"
+       class="cart-img">
+</td>
+
+            <td>{{ item.product.name }}</td>
+            <td>₹ {{ item.subtotal }}</td>
+            <td>
+              <form action="{% url 'update_cart' item.id %}" method="post" class="d-flex">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                       class="form-control w-50 me-2">
+                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+              </form>
+            </td>
+            <td>₹ {{ item.subtotal }}</td>
+            <td>
+              <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="3" class="text-end fw-bold">Total</td>
+          <td colspan="2" class="fw-bold text-danger">₹ {{ total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-center">Your cart is empty.</p>
+  {% endif %}
+
+  <div class="text-end mt-3">
+    <a href="{% url 'productall' %}" class="btn btn-secondary">Continue Shopping</a>
+    {% if items %}
+<a href="{% url 'checkout' %}"
+   class="btn btn-success"
+   style="padding: 8px 20px; border-radius: 5px;">
+   Proceed to Checkout
+</a>
+
+
+
+
+
+  {% endif %}
+  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{% endblock %}

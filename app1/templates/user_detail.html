@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Orders</title>
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+  <style>
+    .main-wrapper {
+      background-color: #ffe5e5 !important;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      border-collapse: collapse;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f8d7da;
+    }
+  </style>
+</head>
+<body>
+<div class="main-wrapper">
+  <h2 style="color:#b71c1c;">Orders of {{ user.name }}</h2>
+
+  {% if orders %}
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.product.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>₹ {{ order.total_price }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color:#555;">No orders found for this user.</p>
+  {% endif %}
+
+  <br>
+  <a href="{% url 'user_list' %}" style="color:#fff; background:#b71c1c; padding:10px 15px; border-radius:6px; text-decoration:none;">← Back to Users</a>
+</div>
+</body>
+</html>

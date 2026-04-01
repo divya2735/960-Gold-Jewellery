@@ -1,0 +1,281 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* ═════════════════════════════════════════════════════
+       REGISTER PAGE — GOLD JEWELLERY THEME
+       ═════════════════════════════════════════════════════ */
+
+    .reg-wrapper {
+        min-height: 75vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 15px;
+    }
+
+    .reg-card {
+        background: #fff;
+        border: 1.5px solid #f2e6c7;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(212, 175, 55, 0.12);
+        max-width: 520px;
+        width: 100%;
+        overflow: hidden;
+        animation: regFadeIn 0.5s ease;
+    }
+
+    @keyframes regFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Gold Header */
+    .reg-header {
+        background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .reg-header::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+        animation: regHeaderShine 3s infinite;
+    }
+
+    @keyframes regHeaderShine {
+        0% { transform: translate(-100%, -100%) rotate(0deg); }
+        100% { transform: translate(100%, 100%) rotate(45deg); }
+    }
+
+    .reg-header-icon {
+        width: 60px; height: 60px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center; justify-content: center;
+        font-size: 28px;
+        color: #fff;
+        margin-bottom: 12px;
+        backdrop-filter: blur(5px);
+        border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .reg-header h2 {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.6rem;
+        margin: 0;
+        position: relative;
+    }
+
+    .reg-header p {
+        color: rgba(255,255,255,0.85);
+        font-size: 0.9rem;
+        margin: 8px 0 0;
+        position: relative;
+    }
+
+    /* Form Body */
+    .reg-body {
+        padding: 30px;
+    }
+
+    .reg-input-group {
+        margin-bottom: 20px;
+    }
+
+    .reg-input-group label {
+        display: block;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 6px;
+        font-size: 0.95rem;
+    }
+
+    .reg-input-group label i {
+        color: #d4af37;
+        margin-right: 6px;
+    }
+
+    .reg-input-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid #e8dcc8;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        background: #fffdf8;
+        color: #333;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .reg-input-group input:focus {
+        border-color: #d4af37;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        background: #fff;
+    }
+
+    .reg-input-group input::placeholder {
+        color: #bbb;
+    }
+
+    /* Submit Button */
+    .reg-submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #d4af37, #b8860b);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+
+    .reg-submit-btn::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: transform 0.5s;
+        transform: translateX(-100%);
+    }
+
+    .reg-submit-btn:hover::before {
+        transform: translateX(100%);
+    }
+
+    .reg-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .reg-submit-btn:active {
+        transform: scale(0.98);
+    }
+
+    /* Footer Link */
+    .reg-footer {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #f2e6c7;
+    }
+
+    .reg-footer p {
+        color: #777;
+        font-size: 0.92rem;
+        margin: 0;
+    }
+
+    .reg-footer a {
+        color: #d4af37;
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .reg-footer a:hover {
+        color: #b8860b;
+        text-decoration: underline;
+    }
+
+    /* Alert */
+    .reg-alert {
+        margin-top: 15px;
+        padding: 12px 18px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+        background: rgba(231, 76, 60, 0.08);
+        color: #c0392b;
+        border: 1px solid rgba(231, 76, 60, 0.2);
+        animation: regFadeIn 0.3s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+        .reg-header { padding: 22px; }
+        .reg-header h2 { font-size: 1.3rem; }
+        .reg-body { padding: 22px; }
+    }
+</style>
+
+<div class="reg-wrapper">
+    <div class="reg-card">
+
+        <!-- Gold Header -->
+        <div class="reg-header">
+            <div class="reg-header-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h2>Create Your Account</h2>
+            <p>Join 960 Gold Jewellery and start shopping today!</p>
+        </div>
+
+        <!-- Form Body -->
+        <div class="reg-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="reg-input-group">
+                    <label><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="reg-input-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="reg-input-group">
+                    <label><i class="fas fa-phone"></i> Phone Number</label>
+                    <input type="number" name="phone" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="reg-input-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <input type="text" name="address" placeholder="Enter your address" required>
+                </div>
+
+                <div class="reg-input-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" name="password" placeholder="Create a strong password" required>
+                </div>
+
+                <button type="submit" class="reg-submit-btn">
+                    <i class="fas fa-gem"></i> &nbsp; Register Now
+                </button>
+            </form>
+
+            {% if message %}
+            <div class="reg-alert">
+                <i class="fas fa-exclamation-triangle"></i> {{ message }}
+            </div>
+            {% endif %}
+
+            <div class="reg-footer">
+                <p>Already have an account? <a href="{% url 'login1' %}">Login here</a></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

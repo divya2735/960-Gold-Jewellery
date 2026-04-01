@@ -1,0 +1,22 @@
+{% extends "common.html" %}
+{% block content %}
+<div class="container text-center py-4">
+  <h2>Pay with Razorpay</h2>
+  <p>Amount: <b>₹{{ amount }}</b></p>
+  <form action="{{ callback_url }}" method="POST">
+    <script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        data-key="{{ razorpay_key }}"
+        data-amount="{{ amount|add:""|floatformat:"0"|add:"00" }}"
+        data-currency="{{ currency }}"
+        data-order_id="{{ order_id }}"
+        data-buttontext="Pay Now"
+        data-name="LaceUp Store"
+        data-description="Order Payment"
+        data-prefill.email="{{ request.session.email }}"
+        data-theme.color="#528FF0">
+    </script>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  </form>
+</div>
+{% endblock %}
